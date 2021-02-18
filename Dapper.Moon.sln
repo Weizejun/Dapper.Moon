@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.902
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dapper.Moon", "Dapper.Moon\Dapper.Moon.csproj", "{D822BB30-7657-45EF-BEAB-23455B30A278}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dapper.Moon.Test", "Dapper.Moon.Test\Dapper.Moon.Test.csproj", "{B4F532B5-B51A-4E7D-A8CF-CF29CFEBC32A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D822BB30-7657-45EF-BEAB-23455B30A278}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D822BB30-7657-45EF-BEAB-23455B30A278}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D822BB30-7657-45EF-BEAB-23455B30A278}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D822BB30-7657-45EF-BEAB-23455B30A278}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4F532B5-B51A-4E7D-A8CF-CF29CFEBC32A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4F532B5-B51A-4E7D-A8CF-CF29CFEBC32A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4F532B5-B51A-4E7D-A8CF-CF29CFEBC32A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4F532B5-B51A-4E7D-A8CF-CF29CFEBC32A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {92077FA8-A001-43BD-9E29-822907CFB07E}
+	EndGlobalSection
+EndGlobal
