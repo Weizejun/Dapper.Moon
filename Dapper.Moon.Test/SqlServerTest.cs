@@ -378,7 +378,7 @@ END
             {
                 //select * from [t_moon_user] where ([Account] is not null or [Account] <> '' )
                 var result0 = dm.Queryable<User>().Where(i => !string.IsNullOrEmpty(i.Account)).ToSql()?.Sql;
-
+                //in
                 var result0_1 = dm.Queryable<User>().Where(i => new[] { "a","b","c" }.Contains(i.Id)).ToList();
 
                 var result0_2 = dm.Queryable<User>()
