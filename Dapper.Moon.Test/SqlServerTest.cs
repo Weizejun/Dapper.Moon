@@ -387,7 +387,7 @@ END
                     //CreateDate Expire 小时差
                     XXX = DbFunc.Datediff_Hour(n.CreateDate, n.Expire)
                 }).ToList<dynamic>();
-
+                //in
                 var result0_3 = dm.Queryable<User>().Where(i => new string[] { "a1", "b1", "c1" }.Contains(i.Id)).ToList();
 
                 //Account is not null or Account <> ''
