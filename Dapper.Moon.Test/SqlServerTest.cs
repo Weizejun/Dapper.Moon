@@ -519,7 +519,7 @@ END
 
                 var result13 = dm.Queryable<User>().Max<int?>(i => i.Flag);
 
-                //max(isnull([Flag],0))
+                //max(isnull([Flag],1))
                 var result13_2 = dm.Queryable<User>().Max<int?>(i => DbFunc.IsNull(i.Flag, 1));
 
                 var result13_3 = dm.Queryable<User>().Max<int?>(i => DbFunc.IsNull(i.Flag, 1) + 5);

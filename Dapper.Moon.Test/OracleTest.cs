@@ -489,7 +489,7 @@ end Proc_Test;
 
                 var result13 = dm.Queryable<User>().Max<int?>(i => i.Flag);
 
-                //max(nvl(Flag,0))
+                //max(nvl(Flag,1))
                 var result13_2 = dm.Queryable<User>().Max<int?>(i => DbFunc.IsNull(i.Flag, 1));
 
                 var result13_3 = dm.Queryable<User>().Max<int?>(i => DbFunc.IsNull(i.Flag, 1) + 5);
