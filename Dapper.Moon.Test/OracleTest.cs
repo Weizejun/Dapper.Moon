@@ -429,8 +429,8 @@ end Proc_Test;
                     ).Select(i => new
                     {
                         //别名
-                        x1 = DbFunc.Concat(DbFunc.IsNull(i.Icon, ""), "这是1个很奇怪的值"),
-                        Id = DbFunc.Guid()
+                        x1 = string.Concat(DbFunc.IsNull(i.Icon, ""), "这是1个很奇怪的值"),
+                        Id = Guid.NewGuid()
                     }).ToList<UserDto>();
 
                 var result6 = dm.Queryable<User>().Where(
@@ -449,10 +449,10 @@ end Proc_Test;
                 .OrderBy(n => n.t1.Id)
                 .Select(n => new
                 {
-                    Id = DbFunc.Guid(),//newid()
-                    Account = DbFunc.Concat(n.t1.Account, "XXX1"),
-                    NickName = DbFunc.Concat(n.t1.NickName, "XXX2"),
-                    CreateDate = DbFunc.DateTime() // getdate()
+                    Id = Guid.NewGuid(),//newid()
+                    Account = string.Concat(n.t1.Account, "XXX1"),
+                    NickName = string.Concat(n.t1.NickName, "XXX2"),
+                    CreateDate = DateTime.Now // getdate()
                 })
                 .ToPageList<UserDto>(0, 10);
 
@@ -462,10 +462,10 @@ end Proc_Test;
                .Select(i => new
                {
                    //Id = DbFunc.Sequence("SEQ_LOG.nextval"),//如果是序列的话
-                   Id = DbFunc.Guid(),//newid()
-                   Account = DbFunc.Concat(i.Account, "XXX1"),
-                   NickName = DbFunc.Concat(i.NickName, "XXX2"),
-                   CreateDate = DbFunc.DateTime() // getdate()
+                   Id = Guid.NewGuid(),//newid()
+                   Account = string.Concat(i.Account, "XXX1"),
+                   NickName = string.Concat(i.NickName, "XXX2"),
+                   CreateDate = DateTime.Now // getdate()
                }).Into<User>(i => new
                {
                    i.Id,

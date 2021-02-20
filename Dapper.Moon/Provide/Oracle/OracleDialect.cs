@@ -56,5 +56,30 @@ namespace Dapper.Moon
         public override string Guid { get { return "rawtohex(sys_guid())"; } }
 
         public override string Length(string field) { return $"length({field})"; }
+
+        public override string IndexOf(string field, object val)
+        {
+            return $"instr({field}, {val}, 1, 1) - 1";
+        }
+
+        public override string Year(string field)
+        {
+            return $"extract(year from {field})";
+        }
+
+        public override string Month(string field)
+        {
+            return $"extract(month from {field})";
+        }
+
+        public override string Day(string field)
+        {
+            return $"extract(day from {field})";
+        }
+
+        public override string Hour(string field)
+        {
+            return $"cast(to_char({field},'HH24') as number)";
+        }
     }
 }

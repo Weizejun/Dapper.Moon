@@ -165,10 +165,16 @@ namespace Dapper.Moon
         }
         #endregion Resolve
 
+        /// <summary>
+        /// 解析 i=>new {a = 1}
+        /// </summary>
+        /// <param name="exp"></param>
+        /// <returns></returns>
         private string NewExpressionProvider(Expression exp)
         {
             StringBuilder sbSelectFields = new StringBuilder();
             NewExpression ne = exp as NewExpression;
+            if (ne.Members == null) return "";
             for (var i = 0; i < ne.Members.Count; i++)
             {
                 //别名或属性名
@@ -179,6 +185,46 @@ namespace Dapper.Moon
                     MemberExpression mex = ne.Arguments[i] as MemberExpression;
                     //当前属性所属类型
                     Type entityType = mex.Member.ReflectedType;
+                    if (entityType.ToString() == "System.String")
+                    {
+                        string methodName = mex.Member.Name;
+                        switch (methodName)
+                        {
+                            case "Length":
+                                sbSelectFields.Append(SqlDialect.Length(Resolve(mex.Expression)));
+                                break;
+                            default:
+                                throw new Exception("unsupported expression");
+                        }
+                        //跳出本次循环
+                        continue;
+                    }
+                    if (entityType.ToString() == "System.DateTime")
+                    {
+                        string methodName = mex.Member.Name;
+                        switch (methodName)
+                        {
+                            case "Now":
+                                sbSelectFields.Append(SqlDialect.GetDate).Append(" "+ name);
+                                break;
+                            case "Year":
+                                sbSelectFields.Append(SqlDialect.Year(Resolve(mex.Expression))).Append(" " + name);
+                                break;
+                            case "Month":
+                                sbSelectFields.Append(SqlDialect.Month(Resolve(mex.Expression))).Append(" " + name);
+                                break;
+                            case "Day":
+                                sbSelectFields.Append(SqlDialect.Day(Resolve(mex.Expression))).Append(" " + name);
+                                break;
+                            case "Hour":
+                                sbSelectFields.Append(SqlDialect.Hour(Resolve(mex.Expression))).Append(" " + name);
+                                break;
+                            default:
+                                throw new Exception("unsupported expression");
+                        }
+                        //跳出本次循环
+                        continue;
+                    }
                     //属性访问      
                     string argumentString = ne.Arguments[i].ToString();
                     string[] arguments = argumentString.Split('.');
@@ -318,6 +364,14 @@ namespace Dapper.Moon
                     {
                         case "Now":
                             return SqlDialect.GetDate;
+                        case "Year":
+                            return SqlDialect.Year(Resolve(me.Expression));
+                        case "Month":
+                            return SqlDialect.Month(Resolve(me.Expression));
+                        case "Day":
+                            return SqlDialect.Day(Resolve(me.Expression));
+                        case "Hour":
+                            return SqlDialect.Hour(Resolve(me.Expression));
                         default:
                             throw new Exception("unsupported expression");
                     }
@@ -412,60 +466,128 @@ namespace Dapper.Moon
         private string MethodCallExpressionProvider(Expression exp)
         {
             MethodCallExpression mce = exp as MethodCallExpression;
-            if (mce.Method.Name == "Contains"
-                || mce.Method.Name == "EndsWith"
-                || mce.Method.Name == "StartsWith")
+            string declaringType = mce.Method.DeclaringType.ToString();
+            if (declaringType == "System.String")
             {
+                //获取字段
+                string left = Resolve(mce.Object ?? mce.Arguments[0]);
+                object _value = "";
                 if (mce.Object == null)
                 {
-                    return string.Format("{0} in ({1})", Resolve(mce.Arguments[1]), Resolve(mce.Arguments[0]));
-                }
-                else
-                {
-                    if (mce.Object.NodeType == ExpressionType.MemberAccess)
+                    switch (mce.Arguments[0].NodeType)
                     {
-                        string left = Resolve(mce.Object);
-                        object _value = "";
-                        switch (mce.Arguments[0].NodeType)
-                        {
-                            case ExpressionType.Constant:
-                                ConstantExpression ce = mce.Arguments[0] as ConstantExpression;
-                                //常量值访问
-                                _value = ce?.Value;
-                                break;
-                            case ExpressionType.MemberAccess:
-                                //属性访问
-                                _value = Expression.Lambda(mce.Arguments[0]).Compile().DynamicInvoke();
-                                break;
-                            default:
-                                throw new Exception("unsupported expression");
-                        }
-                        string result = "";
-                        switch (mce.Method.Name)
-                        {
-                            case "Contains":
-                                SetParameter("%" + GetValueType(_value) + "%");
-                                result = string.Format("{0} like {1}", left, SqlDialect.ParameterPrefix + ParameterName + (Index));
-                                break;
-                            case "EndsWith":
-                                SetParameter("%" + GetValueType(_value));
-                                result = string.Format("{0} like {1}", left, SqlDialect.ParameterPrefix + ParameterName + (Index));
-                                break;
-                            case "StartsWith":
-                                SetParameter(GetValueType(_value) + "%");
-                                result = string.Format("{0} like {1}", left, SqlDialect.ParameterPrefix + ParameterName + (Index));
-                                break;
-                        }
-                        return result;
+                        case ExpressionType.Call:
+                        case ExpressionType.Constant:
+                            ConstantExpression ce = mce.Arguments[1] as ConstantExpression;
+                            //常量值访问
+                            _value = ce?.Value;
+                            break;
+                        case ExpressionType.MemberAccess:
+                            //属性访问
+                            if (mce.Arguments.Count >= 2)
+                            {
+                                _value = Expression.Lambda(mce.Arguments[1]).Compile().DynamicInvoke();
+                            }
+                            break;
+                        default:
+                            throw new Exception("unsupported expression");
                     }
                 }
+                string result = "";
+                switch (mce.Method.Name)
+                {
+                    case "Contains":
+                        SetParameter("%" + GetValueType(_value) + "%");
+                        result = string.Format("{0} like {1}", left, SqlDialect.ParameterPrefix + ParameterName + (Index));
+                        break;
+                    case "EndsWith":
+                        SetParameter("%" + GetValueType(_value));
+                        result = string.Format("{0} like {1}", left, SqlDialect.ParameterPrefix + ParameterName + (Index));
+                        break;
+                    case "StartsWith":
+                        SetParameter(GetValueType(_value) + "%");
+                        result = string.Format("{0} like {1}", left, SqlDialect.ParameterPrefix + ParameterName + (Index));
+                        break;
+                    case "IsNullOrEmpty":
+                        result = string.Format("({0} is null or {0} = '')", left);
+                        break;
+                    case "Concat":
+                        SetParameter(GetValueType(_value));
+                        result = SqlDialect.Concat(left, SqlDialect.ParameterPrefix + ParameterName + (Index));
+                        break;
+                    case "IndexOf":
+                        _value = (mce.Arguments[0] as ConstantExpression)?.Value;
+                        SetParameter(GetValueType(_value));
+                        result = SqlDialect.IndexOf(left, SqlDialect.ParameterPrefix + ParameterName + (Index));
+                        break;
+                    case "PadLeft":
+                        _value = (mce.Arguments[0] as ConstantExpression)?.Value;
+                        object val2 = (mce.Arguments[1] as ConstantExpression)?.Value;
+                        SetParameter(GetValueType(_value));
+                        _value = SqlDialect.ParameterPrefix + ParameterName + (Index);
+                        SetParameter(GetValueType(val2));
+                        val2 = SqlDialect.ParameterPrefix + ParameterName + (Index);
+                        result = SqlDialect.PadLeft(left, _value, val2);
+                        break;
+                    case "PadRight":
+                        _value = (mce.Arguments[0] as ConstantExpression)?.Value;
+                        val2 = (mce.Arguments[1] as ConstantExpression)?.Value;
+                        SetParameter(GetValueType(_value));
+                        _value = SqlDialect.ParameterPrefix + ParameterName + (Index);
+                        SetParameter(GetValueType(val2));
+                        val2 = SqlDialect.ParameterPrefix + ParameterName + (Index);
+                        result = SqlDialect.PadRight(left, _value, val2);
+                        break;
+                    case "Replace":
+                        _value = (mce.Arguments[0] as ConstantExpression)?.Value;
+                        val2 = (mce.Arguments[1] as ConstantExpression)?.Value;
+                        SetParameter(GetValueType(_value));
+                        _value = SqlDialect.ParameterPrefix + ParameterName + (Index);
+                        SetParameter(GetValueType(val2));
+                        val2 = SqlDialect.ParameterPrefix + ParameterName + (Index);
+                        result = SqlDialect.Replace(left, _value, val2);
+                        break;
+                    case "Substring":
+                        _value = (mce.Arguments[0] as ConstantExpression)?.Value;
+                        val2 = (mce.Arguments[1] as ConstantExpression)?.Value;
+                        SetParameter(GetValueType(_value));
+                        _value = SqlDialect.ParameterPrefix + ParameterName + (Index);
+                        SetParameter(GetValueType(val2));
+                        val2 = SqlDialect.ParameterPrefix + ParameterName + (Index);
+                        result = SqlDialect.Substring(left, _value, val2);
+                        break;
+                    case "ToLower":
+                        result = SqlDialect.ToLower(left);
+                        break;
+                    case "ToUpper":
+                        result = SqlDialect.ToUpper(left);
+                        break;
+                    case "Trim":
+                        result = SqlDialect.Trim(left);
+                        break;
+                    case "TrimEnd":
+                        result = SqlDialect.TrimEnd(left);
+                        break;
+                    case "TrimStart":
+                        result = SqlDialect.TrimStart(left);
+                        break;
+                    case "FirstOrDefault":
+                        result = SqlDialect.FirstOrDefault(left);
+                        break;
+                    default:
+                        throw new Exception("unsupported expression");
+                }
+                return result;
             }
-            else if (mce.Method.Name == "IsNullOrEmpty")
+            else if (declaringType == "System.Linq.Enumerable")
             {
-                string left = Resolve(mce.Arguments[0]);
-                return string.Format("({0} is null or {0} = '')", left);
+                return string.Format("{0} in ({1})", Resolve(mce.Arguments[1]), Resolve(mce.Arguments[0]));
             }
-            else if (mce.Method.DeclaringType.ToString() == "Dapper.Moon.DbFunc")
+            else if (declaringType == "System.Guid")
+            {
+                return SqlDialect.Guid;
+            }
+            else if (declaringType == "Dapper.Moon.DbFunc")
             {
                 #region DbFunc
                 if (mce.Method.Name.Contains("Datediff"))
@@ -517,14 +639,8 @@ namespace Dapper.Moon
                         }
                         result = SqlDialect.Between(column, param1, param2);
                         break;
-                    case "Concat":
-                        result = SqlDialect.Concat(column, Resolve(mce.Arguments[1]));
-                        break;
                     case "IsNull":
                         result = SqlDialect.IsNull(column, Resolve(mce.Arguments[1]));
-                        break;
-                    case "Guid":
-                        result = SqlDialect.Guid;
                         break;
                     case "DateTime":
                         result = SqlDialect.GetDate;

@@ -33,5 +33,55 @@ namespace Dapper.Moon
         public override string Guid { get { return "REPLACE(NEWID(), '-', '')"; } }
 
         public override string Length(string field) { return $"len({field})"; }
+
+        public override string IndexOf(string field, object val)
+        {
+            return $"charindex({field},{val}) - 1";
+        }
+
+        public override string Substring(string field, object b, object c)
+        {
+            return $"substring({field}, {b}, {c} + 1)";
+        }
+
+        public override string FirstOrDefault(string field)
+        {
+            return $"substring({field},1,1)";
+        }
+
+        public override string PadLeft(string field, object b, object c)
+        {
+            throw new Exception("function not supported sqlserver");
+        }
+
+        public override string PadRight(string field, object b, object c)
+        {
+            throw new Exception("function not supported sqlserver");
+        }
+
+        public override string Trim(string field)
+        {
+            throw new Exception("function not supported sqlserver");
+        }
+
+        public override string Year(string field)
+        {
+            return $"datepart(year, {field})";
+        }
+
+        public override string Month(string field)
+        {
+            return $"datepart(month, {field})";
+        }
+
+        public override string Day(string field)
+        {
+            return $"datepart(day, {field})";
+        }
+
+        public override string Hour(string field)
+        {
+            return $"datepart(hour, {field})";
+        }
     }
 }

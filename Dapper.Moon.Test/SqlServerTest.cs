@@ -12,8 +12,8 @@ namespace Dapper.Moon.Test
 {
     public class SqlServerTest
     {
-        public static string connectionString = "server=192.168.101.21;uid=sa;pwd=ccn123.;database=TDC_DB";
-        //public static string connectionString = "server=.;uid=sa;pwd=123456;database=moon.cms.v2";
+        //public static string connectionString = "server=192.168.101.21;uid=sa;pwd=ccn123.;database=TDC_DB";
+        public static string connectionString = "server=.;uid=sa;pwd=123456;database=moon.cms.v2";
 
         #region DapperMoonFactory
         private class DapperMoonFactory
@@ -376,6 +376,47 @@ END
         {
             using (DapperMoon dm = DapperMoonFactory.Create())
             {
+//                DateTime beginDate1 = DateTime.Parse("2021-02-14 23:58:48");
+//                DateTime endDate2 = DateTime.Parse("2021-02-14 23:59:59");
+
+//                var resultx2= dm.Queryable<User>().Where(
+//                     i => 
+//DbFunc.Between(i.CreateDate, beginDate1, endDate2)
+//&& DbFunc.Datediff_Hour(i.CreateDate, beginDate1) < 24 
+//&& DbFunc.ToDateTime(i.ExpireX2) >= DateTime.Now
+//                     ).Select(i=> new {
+//                         //CreateDate Expire 小时差
+//                         XXX = DbFunc.Datediff_Hour(i.CreateDate, i.Expire)
+//                     })
+//                    .Take(10).ToList();
+
+                //var result11 = dm.Queryable<User>().Where(
+                // i => DbFunc.Between(i.CreateDate, "2021-02-14 23:58:48", "2021-02-14 23:59:59"))
+                //.Take(10).ToList();
+
+                var resultX = dm.Queryable<User>().Where(i =>
+                  i.CreateDate == DateTime.Now &&
+                  i.CreateDate.Year == 2021 || i.CreateDate.Hour == 12
+              ).Select(i => new
+              {
+                  x2 = DateTime.Now
+              }).ToList();
+
+                var result = dm.Queryable<User>().Where(i =>
+                    i.Account.IndexOf("a") == -1 &&
+                    i.Account.Replace("a", "c") == "x" &&
+                    string.Concat(i.Account, "x") == "a" &&
+                    i.Account != null
+                ).Select(i => new
+                {
+                    x2 = i.Account.Replace("a", "c"),
+                    x3 = string.Concat(i.Account, "x"),
+                    x4 = i.Account.ToUpper(),
+                    x6 = i.Account.TrimEnd(),
+                    x7 = i.Account.TrimStart(),
+                    x8 = i.Account.Substring(2, 3)
+                }).ToSql().Sql;//.ToList();
+
                 //select * from [t_moon_user] where ([Account] is not null or [Account] <> '' )
                 var result0 = dm.Queryable<User>().Where(i => !string.IsNullOrEmpty(i.Account)).ToSql()?.Sql;
                 //in
@@ -463,8 +504,8 @@ END
                     ).Select(i => new
                     {
                         //别名
-                        x1 = DbFunc.Concat(DbFunc.IsNull(i.Icon, ""), "这是1个很奇怪的值"),
-                        Id = DbFunc.Guid()
+                        x1 = string.Concat(DbFunc.IsNull(i.Icon, ""), "这是1个很奇怪的值"),
+                        Id = Guid.NewGuid()
                     }).ToList<UserDto>();
 
                 var result6 = dm.Queryable<User>().Where(
@@ -483,10 +524,10 @@ END
                 .OrderBy(n => n.t1.Id)
                 .Select(n => new
                 {
-                    Id = DbFunc.Guid(),//newid()
-                    Account = DbFunc.Concat(n.t1.Account, "XXX1"),
-                    NickName = DbFunc.Concat(n.t1.NickName, "XXX2"),
-                    CreateDate = DbFunc.DateTime() // getdate()
+                    Id = Guid.NewGuid(),//newid()
+                    Account = string.Concat(n.t1.Account, "XXX1"),
+                    NickName = string.Concat(n.t1.NickName, "XXX2"),
+                    CreateDate = DateTime.Now // getdate()
                 })
                 .ToPageList<UserDto>(0, 10);
 
@@ -495,10 +536,10 @@ END
                .Take(10)
                .Select(i => new
                {
-                   Id = DbFunc.Guid(),//newid()
-                   Account = DbFunc.Concat(i.Account, "XXX1"),
-                   NickName = DbFunc.Concat(i.NickName, "XXX2"),
-                   CreateDate = DbFunc.DateTime() // getdate()
+                   Id = Guid.NewGuid(),//newid()
+                   Account = string.Concat(i.Account, "XXX1"),
+                   NickName = string.Concat(i.NickName, "XXX2"),
+                   CreateDate = DateTime.Now // getdate()
                }).Into<User>(i => new
                {
                    i.Id,

@@ -12,8 +12,8 @@ namespace Dapper.Moon.Test
 {
     public class MySqlTest
     {
-        //public static string connectionString = "server=localhost;uid=root;pwd=123456;database=moon_core_v2;port=3306;";
-        public  static string connectionString = "server=localhost;uid=root;pwd=moon@1234;database=moon_cms;port=3306;charset=utf8mb4";
+        public static string connectionString = "server=localhost;uid=root;pwd=123456;database=moon_core_v2;port=3306;";
+        //public  static string connectionString = "server=localhost;uid=root;pwd=moon@1234;database=moon_cms;port=3306;charset=utf8mb4";
 
         #region DapperMoonFactory
         class DapperMoonFactory
@@ -362,6 +362,20 @@ END
         {
             using (DapperMoon dm = DapperMoonFactory.Create())
             {
+                var result = dm.Queryable<User>().Where(i =>
+                    i.Account.IndexOf("a") == -1 &&
+                    i.Account.Replace("a", "c") == "x" &&
+                    string.Concat(i.Account, "x") == "a" &&
+                    i.Account != null
+                ).Select(i => new
+                {
+                    x2 = i.Account.Replace("a", "c"),
+                    x3 = string.Concat(i.Account, "x"),
+                    x4 = i.Account.ToUpper(),
+                    x6 = i.Account.Trim(),
+                    x8 = i.Account.Substring(2, 3)
+                }).ToList();
+
                 //select * from `t_moon_user` where (`Account` is not null or `Account` <> '' )
                 var result0 = dm.Queryable<User>().Where(i => !string.IsNullOrEmpty(i.Account)).ToSql()?.Sql;
                 //in
@@ -439,8 +453,8 @@ END
                     ).Select(i => new
                     {
                         //别名
-                        x1 = DbFunc.Concat(DbFunc.IsNull(i.Icon, ""), "这是1个很奇怪的值"),
-                        Id = DbFunc.Guid()
+                        x1 = string.Concat(DbFunc.IsNull(i.Icon, ""), "这是1个很奇怪的值"),
+                        Id = Guid.NewGuid()
                     }).ToList<UserDto>();
 
                 var result6 = dm.Queryable<User>().Where(
@@ -459,10 +473,10 @@ END
                 .OrderBy(n => n.t1.Id)
                 .Select(n => new
                 {
-                    Id = DbFunc.Guid(),//newid()
-                    Account = DbFunc.Concat(n.t1.Account, "XXX1"),
-                    NickName = DbFunc.Concat(n.t1.NickName, "XXX2"),
-                    CreateDate = DbFunc.DateTime() // getdate()
+                    Id = Guid.NewGuid(),//newid()
+                    Account = string.Concat(n.t1.Account, "XXX1"),
+                    NickName = string.Concat(n.t1.NickName, "XXX2"),
+                    CreateDate = DateTime.Now // getdate()
                 })
                 .ToPageList<UserDto>(0, 10);
 
@@ -471,10 +485,10 @@ END
                .Take(10)
                .Select(i => new
                {
-                   Id = DbFunc.Guid(),//newid()
-                   Account = DbFunc.Concat(i.Account, "XXX1"),
-                   NickName = DbFunc.Concat(i.NickName, "XXX2"),
-                   CreateDate = DbFunc.DateTime() // getdate()
+                   Id = Guid.NewGuid(),//newid()
+                   Account = string.Concat(i.Account, "XXX1"),
+                   NickName = string.Concat(i.NickName, "XXX2"),
+                   CreateDate = DateTime.Now // getdate()
                }).Into<User>(i => new
                {
                    i.Id,

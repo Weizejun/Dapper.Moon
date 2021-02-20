@@ -19,10 +19,7 @@ namespace Dapper.Moon
         public static int Datediff_Hour(DateTime field, string date) { return 0; }
         public static bool Between(object field, object a, object b) { return true; }
         public static DateTime ToDateTime(string field) { return System.DateTime.MaxValue; }
-        public static TResult Concat<TResult>(TResult field, string a) { return default(TResult); }
         public static TResult IsNull<TResult>(object field, TResult val) { return default(TResult); }
-        public static string Guid() { return null; }
-        public static string DateTime() { return null; }
         public static string Sequence(string name) { return null; }
     }
 

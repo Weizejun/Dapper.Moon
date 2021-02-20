@@ -15,12 +15,29 @@ namespace Dapper.Moon
         string ParameterPrefix { get; }
         string ToDateTime(string field);
         string Between(object field, object a, object b);
-        string Concat(string column, string val);
         string SetSqlName(string name);
         string GetDate { get; }
         string Datediff(string dateType, string column, string dt);
         string IsNull(object column, object val);
         string Guid { get; }
+
+        string Concat(string column, string val);
         string Length(string field);
+        string IndexOf(string field, object val);
+        string PadLeft(string field, object b, object c);
+        string PadRight(string field, object b, object c);
+        string Replace(string field, object b, object c);
+        string Substring(string field, object b, object c);
+        string ToLower(string field);
+        string ToUpper(string field);
+        string Trim(string field);
+        string TrimEnd(string field);
+        string TrimStart(string field);
+        string FirstOrDefault(string field);
+
+        string Year(string field);
+        string Month(string field);
+        string Day(string field);
+        string Hour(string field);
     }
 }
