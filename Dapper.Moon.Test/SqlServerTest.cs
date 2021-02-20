@@ -390,6 +390,7 @@ END
                 //in
                 var result0_3 = dm.Queryable<User>().Where(i => new string[] { "a1", "b1", "c1" }.Contains(i.Id)).ToList();
 
+                //len(account) = 10
                 var result0_4 = dm.Queryable<User>().Where(i => i.Account.Length == 10).ToSql()?.Sql;
 
                 //Account is not null or Account <> ''
