@@ -37,5 +37,6 @@ namespace Dapper.Moon
         public abstract string Datediff(string dateType, string column, string dt);
         public abstract string IsNull(object column, object val);
         public abstract string Guid { get; }
+        public abstract string Length(string field);
     }
 }

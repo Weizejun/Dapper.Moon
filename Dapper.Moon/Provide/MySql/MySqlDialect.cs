@@ -28,5 +28,7 @@ namespace Dapper.Moon
         }
 
         public override string Guid { get { return "md5(uuid())"; } }
+
+        public override string Length(string field) { return $"char_length({field})"; }
     }
 }

@@ -31,5 +31,7 @@ namespace Dapper.Moon
         }
 
         public override string Guid { get { return "REPLACE(NEWID(), '-', '')"; } }
+
+        public override string Length(string field) { return $"len({field})"; }
     }
 }

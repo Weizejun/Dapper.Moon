@@ -324,6 +324,17 @@ namespace Dapper.Moon
                     //SetParameter(DateTime.Now);
                     //return SqlDialect.ParameterPrefix + ParameterName + (Index);
                 }
+                if (me.Member.DeclaringType.ToString() == "System.String")
+                {
+                    string methodName = me.Member.Name;
+                    switch (methodName)
+                    {
+                        case "Length":
+                            return SqlDialect.Length(Resolve(me.Expression));
+                        default:
+                            throw new Exception("unsupported expression");
+                    }
+                }
 
                 if (IsPrefix)
                 {
@@ -454,18 +465,19 @@ namespace Dapper.Moon
                 string left = Resolve(mce.Arguments[0]);
                 return string.Format("({0} is null or {0} = '')", left);
             }
-            else if (mce.Method.Name.Contains("Datediff"))
-            {
-                if (mce.Method.Name.IndexOf('_') != -1)
-                {
-                    string dateType = mce.Method.Name.Substring(mce.Method.Name.IndexOf('_') + 1);
-                    string left = Resolve(mce.Arguments[0]);
-                    string right = Resolve(mce.Arguments[1]);
-                    return SqlDialect.Datediff(dateType, left, right);
-                }
-            }
             else if (mce.Method.DeclaringType.ToString() == "Dapper.Moon.DbFunc")
             {
+                #region DbFunc
+                if (mce.Method.Name.Contains("Datediff"))
+                {
+                    if (mce.Method.Name.IndexOf('_') != -1)
+                    {
+                        string dateType = mce.Method.Name.Substring(mce.Method.Name.IndexOf('_') + 1);
+                        string left = Resolve(mce.Arguments[0]);
+                        string right = Resolve(mce.Arguments[1]);
+                        return SqlDialect.Datediff(dateType, left, right);
+                    }
+                }
                 string result = "";
                 string column = "";
                 if (mce.Arguments.Count > 0)
@@ -522,6 +534,7 @@ namespace Dapper.Moon
                         break;
                 }
                 return result;
+                #endregion DbFunc
             }
             return "";
         }

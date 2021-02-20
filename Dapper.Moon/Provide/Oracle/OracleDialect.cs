@@ -54,5 +54,7 @@ namespace Dapper.Moon
         }
 
         public override string Guid { get { return "rawtohex(sys_guid())"; } }
+
+        public override string Length(string field) { return $"length({field})"; }
     }
 }

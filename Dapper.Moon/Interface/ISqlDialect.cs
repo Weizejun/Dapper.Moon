@@ -21,5 +21,6 @@ namespace Dapper.Moon
         string Datediff(string dateType, string column, string dt);
         string IsNull(object column, object val);
         string Guid { get; }
+        string Length(string field);
     }
 }
