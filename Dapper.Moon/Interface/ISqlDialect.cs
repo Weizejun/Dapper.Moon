@@ -13,11 +13,8 @@ namespace Dapper.Moon
     public interface ISqlDialect
     {
         string ParameterPrefix { get; }
-        string ToDateTime(string field);
         string Between(object field, object a, object b);
         string SetSqlName(string name);
-        string GetDate { get; }
-        string Datediff(string dateType, string column, string dt);
         string IsNull(object column, object val);
         string Guid { get; }
 
@@ -39,5 +36,8 @@ namespace Dapper.Moon
         string Month(string field);
         string Day(string field);
         string Hour(string field);
+        string ToDateTime(string field);
+        string Datediff(string dateType, string column, string dt);
+        string GetDate { get; }
     }
 }

@@ -36,7 +36,7 @@ namespace Dapper.Moon.Test
             //sql.DeleteTest();
             //sql.ProcTest();
             //sql.TransactionTest();
-            //sql.QueryTest();
+            sql.QueryTest();
             //sql.LambdaQueryTest();
             //sql.DbFirstTest();
         }

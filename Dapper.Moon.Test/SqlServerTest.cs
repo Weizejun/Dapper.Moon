@@ -376,30 +376,14 @@ END
         {
             using (DapperMoon dm = DapperMoonFactory.Create())
             {
-//                DateTime beginDate1 = DateTime.Parse("2021-02-14 23:58:48");
-//                DateTime endDate2 = DateTime.Parse("2021-02-14 23:59:59");
-
-//                var resultx2= dm.Queryable<User>().Where(
-//                     i => 
-//DbFunc.Between(i.CreateDate, beginDate1, endDate2)
-//&& DbFunc.Datediff_Hour(i.CreateDate, beginDate1) < 24 
-//&& DbFunc.ToDateTime(i.ExpireX2) >= DateTime.Now
-//                     ).Select(i=> new {
-//                         //CreateDate Expire 小时差
-//                         XXX = DbFunc.Datediff_Hour(i.CreateDate, i.Expire)
-//                     })
-//                    .Take(10).ToList();
-
-                //var result11 = dm.Queryable<User>().Where(
-                // i => DbFunc.Between(i.CreateDate, "2021-02-14 23:58:48", "2021-02-14 23:59:59"))
-                //.Take(10).ToList();
-
-                var resultX = dm.Queryable<User>().Where(i =>
+                 var resultX = dm.Queryable<User>().Where(i =>
                   i.CreateDate == DateTime.Now &&
                   i.CreateDate.Year == 2021 || i.CreateDate.Hour == 12
+                  &&DateTime.Parse(string.Concat(i.Expire," 23:59:59"))<= DateTime.Now
               ).Select(i => new
               {
-                  x2 = DateTime.Now
+                  x2 = DateTime.Now,
+                  x3 = DateTime.Parse(i.Expire)
               }).ToList();
 
                 var result = dm.Queryable<User>().Where(i =>
@@ -428,6 +412,7 @@ END
                     //CreateDate Expire 小时差
                     XXX = DbFunc.Datediff_Hour(n.CreateDate, n.Expire)
                 }).ToList<dynamic>();
+
                 //in
                 var result0_3 = dm.Queryable<User>().Where(i => new string[] { "a1", "b1", "c1" }.Contains(i.Id)).ToList();
 
@@ -583,14 +568,8 @@ END
 
                 //DateTime.Now = getdate() now()
                 var result15 = dm.Queryable<User>()
-                   .Where(i => DbFunc.ToDateTime(i.ExpireX2) >= DateTime.Now)
+                   .Where(i => DateTime.Parse(i.ExpireX2) >= DateTime.Now)
                    .ToList();
-
-                //dm.Updateable<User>().SetColumns("Expire='2021/2/15'").Where(i => true).Execute();
-
-                //var result16 = dm.Queryable<User>()
-                //   .Where(i => DbFunc.Concat(i.Expire, " 23:59:59") >= DateTime.Now)
-                //   .First();
 
                 var result17 = dm.Queryable<User>().Where("account=@account", new { account = "moon" })
                     .Select("*").First();
@@ -608,7 +587,7 @@ END
                      }).Take(10).ToList<UserDto>();
 
                 var result20 = dm.Queryable<User>()
-                  .Where(i => i.CreateDate >= DbFunc.ToDateTime("2021-02-14 23:59:59"))
+                  .Where(i => i.CreateDate >= DateTime.Parse("2021-02-14 23:59:59"))
                   .ToList();
 
                 DataTable dataTable = dm.Repository.Query("select * from t_moon_user where account = @account",

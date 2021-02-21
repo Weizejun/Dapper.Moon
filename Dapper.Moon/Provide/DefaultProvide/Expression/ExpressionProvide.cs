@@ -191,7 +191,7 @@ namespace Dapper.Moon
                         switch (methodName)
                         {
                             case "Length":
-                                sbSelectFields.Append(SqlDialect.Length(Resolve(mex.Expression)));
+                                sbSelectFields.Append(SqlDialect.Length(Resolve(mex.Expression))).Append(" ").Append(name).Append(",");
                                 break;
                             default:
                                 throw new Exception("unsupported expression");
@@ -205,19 +205,19 @@ namespace Dapper.Moon
                         switch (methodName)
                         {
                             case "Now":
-                                sbSelectFields.Append(SqlDialect.GetDate).Append(" "+ name);
+                                sbSelectFields.Append(SqlDialect.GetDate).Append(" ").Append(name).Append(",");
                                 break;
                             case "Year":
-                                sbSelectFields.Append(SqlDialect.Year(Resolve(mex.Expression))).Append(" " + name);
+                                sbSelectFields.Append(SqlDialect.Year(Resolve(mex.Expression))).Append(" ").Append(name).Append(",");
                                 break;
                             case "Month":
-                                sbSelectFields.Append(SqlDialect.Month(Resolve(mex.Expression))).Append(" " + name);
+                                sbSelectFields.Append(SqlDialect.Month(Resolve(mex.Expression))).Append(" ").Append(name).Append(",");
                                 break;
                             case "Day":
-                                sbSelectFields.Append(SqlDialect.Day(Resolve(mex.Expression))).Append(" " + name);
+                                sbSelectFields.Append(SqlDialect.Day(Resolve(mex.Expression))).Append(" ").Append(name).Append(",");
                                 break;
                             case "Hour":
-                                sbSelectFields.Append(SqlDialect.Hour(Resolve(mex.Expression))).Append(" " + name);
+                                sbSelectFields.Append(SqlDialect.Hour(Resolve(mex.Expression))).Append(" ").Append(name).Append(",");
                                 break;
                             default:
                                 throw new Exception("unsupported expression");
@@ -244,12 +244,12 @@ namespace Dapper.Moon
                                 if (name != colName)
                                 {
                                     colName = GetColumnName(entityType, colName);
-                                    sbSelectFields.Append(prefix + "." + (IsQuote ? SqlDialect.SetSqlName(colName) : colName) + $" {name},");
+                                    sbSelectFields.Append(prefix).Append(".").Append(IsQuote ? SqlDialect.SetSqlName(colName) : colName).Append(" ").Append(name).Append(",");
                                 }
                                 else
                                 {
                                     colName = GetColumnName(entityType, colName);
-                                    sbSelectFields.Append(prefix + "." + (IsQuote ? SqlDialect.SetSqlName(colName) : colName) + ",");
+                                    sbSelectFields.Append(prefix).Append(".").Append(IsQuote ? SqlDialect.SetSqlName(colName) : colName).Append(",");
                                 }
                                 break;
                         }
@@ -261,12 +261,12 @@ namespace Dapper.Moon
                         {
                             colName = GetColumnName(entityType, colName);
                             colName = IsQuote ? SqlDialect.SetSqlName(colName) : colName;
-                            sbSelectFields.Append(colName + $" {name},");
+                            sbSelectFields.Append(colName).Append(" ").Append(name).Append(",");
                         }
                         else
                         {
                             colName = GetColumnName(entityType, colName);
-                            sbSelectFields.Append((IsQuote ? SqlDialect.SetSqlName(colName) : colName) + ",");
+                            sbSelectFields.Append(IsQuote ? SqlDialect.SetSqlName(colName) : colName).Append(",");
                         }
                     }
                 }
@@ -274,7 +274,7 @@ namespace Dapper.Moon
                 {
                     //方法调用
                     string result = Resolve(ne.Arguments[i]);
-                    sbSelectFields.Append(result + $" {name},");
+                    sbSelectFields.Append(result).Append(" ").Append(name).Append(",");
                 }
             }
             if (sbSelectFields.Length > 1)
@@ -375,8 +375,6 @@ namespace Dapper.Moon
                         default:
                             throw new Exception("unsupported expression");
                     }
-                    //SetParameter(DateTime.Now);
-                    //return SqlDialect.ParameterPrefix + ParameterName + (Index);
                 }
                 if (me.Member.DeclaringType.ToString() == "System.String")
                 {
@@ -587,6 +585,16 @@ namespace Dapper.Moon
             {
                 return SqlDialect.Guid;
             }
+            else if (declaringType == "System.DateTime")
+            {
+                switch (mce.Method.Name)
+                {
+                    case "Parse":
+                        return SqlDialect.ToDateTime(Resolve(mce.Arguments[0]));
+                    default:
+                        throw new Exception("unsupported expression");
+                }
+            }
             else if (declaringType == "Dapper.Moon.DbFunc")
             {
                 #region DbFunc
@@ -622,9 +630,6 @@ namespace Dapper.Moon
                         break;
                     case "Avg":
                         result = $"avg({column})";
-                        break;
-                    case "ToDateTime":
-                        result = SqlDialect.ToDateTime(column);
                         break;
                     case "Between":
                         string param1 = Resolve(mce.Arguments[1]);
