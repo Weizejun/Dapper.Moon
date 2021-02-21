@@ -332,12 +332,12 @@ namespace Dapper.Moon
             else if (ce.Value is ValueType)
             {
                 SetParameter(GetValueType(ce.Value));
-                return SqlDialect.ParameterPrefix + ParameterName + (Index);
+                return GetParamName();
             }
             else if (ce.Value is string || ce.Value is DateTime || ce.Value is char)
             {
                 SetParameter(GetValueType(ce.Value));
-                return SqlDialect.ParameterPrefix + ParameterName + (Index);
+                return GetParamName();
             }
             return "";
         }
@@ -423,12 +423,12 @@ namespace Dapper.Moon
                 else if (result is ValueType)
                 {
                     SetParameter(GetValueType(result));
-                    return SqlDialect.ParameterPrefix + ParameterName + (Index);
+                    return GetParamName();
                 }
                 else if (result is string || result is DateTime || result is char)
                 {
                     SetParameter(GetValueType(result));
-                    return SqlDialect.ParameterPrefix + ParameterName + (Index);
+                    return GetParamName();
                 }
                 else if (result is int[])
                 {
@@ -437,7 +437,7 @@ namespace Dapper.Moon
                     foreach (var item in array)
                     {
                         SetParameter(item);
-                        sb.Append(SqlDialect.ParameterPrefix + ParameterName + (Index)).Append(",");
+                        sb.Append(GetParamName()).Append(",");
                     }
                     return sb.ToString(0, sb.Length - 1);
                 }
@@ -448,7 +448,7 @@ namespace Dapper.Moon
                     foreach (var item in array)
                     {
                         SetParameter(item);
-                        sb.Append(SqlDialect.ParameterPrefix + ParameterName + (Index)).Append(",");
+                        sb.Append(GetParamName()).Append(",");
                     }
                     return sb.ToString(0, sb.Length - 1);
                 }
@@ -496,62 +496,62 @@ namespace Dapper.Moon
                 {
                     case "Contains":
                         SetParameter("%" + GetValueType(_value) + "%");
-                        result = string.Format("{0} like {1}", left, SqlDialect.ParameterPrefix + ParameterName + (Index));
+                        result = string.Format("{0} like {1}", left, GetParamName());
                         break;
                     case "EndsWith":
                         SetParameter("%" + GetValueType(_value));
-                        result = string.Format("{0} like {1}", left, SqlDialect.ParameterPrefix + ParameterName + (Index));
+                        result = string.Format("{0} like {1}", left, GetParamName());
                         break;
                     case "StartsWith":
                         SetParameter(GetValueType(_value) + "%");
-                        result = string.Format("{0} like {1}", left, SqlDialect.ParameterPrefix + ParameterName + (Index));
+                        result = string.Format("{0} like {1}", left, GetParamName());
                         break;
                     case "IsNullOrEmpty":
                         result = string.Format("({0} is null or {0} = '')", left);
                         break;
                     case "Concat":
                         SetParameter(GetValueType(_value));
-                        result = SqlDialect.Concat(left, SqlDialect.ParameterPrefix + ParameterName + (Index));
+                        result = SqlDialect.Concat(left, GetParamName());
                         break;
                     case "IndexOf":
                         _value = (mce.Arguments[0] as ConstantExpression)?.Value;
                         SetParameter(GetValueType(_value));
-                        result = SqlDialect.IndexOf(left, SqlDialect.ParameterPrefix + ParameterName + (Index));
+                        result = SqlDialect.IndexOf(left, GetParamName());
                         break;
                     case "PadLeft":
                         _value = (mce.Arguments[0] as ConstantExpression)?.Value;
                         object val2 = (mce.Arguments[1] as ConstantExpression)?.Value;
                         SetParameter(GetValueType(_value));
-                        _value = SqlDialect.ParameterPrefix + ParameterName + (Index);
+                        _value = GetParamName();
                         SetParameter(GetValueType(val2));
-                        val2 = SqlDialect.ParameterPrefix + ParameterName + (Index);
+                        val2 = GetParamName();
                         result = SqlDialect.PadLeft(left, _value, val2);
                         break;
                     case "PadRight":
                         _value = (mce.Arguments[0] as ConstantExpression)?.Value;
                         val2 = (mce.Arguments[1] as ConstantExpression)?.Value;
                         SetParameter(GetValueType(_value));
-                        _value = SqlDialect.ParameterPrefix + ParameterName + (Index);
+                        _value = GetParamName();
                         SetParameter(GetValueType(val2));
-                        val2 = SqlDialect.ParameterPrefix + ParameterName + (Index);
+                        val2 = GetParamName();
                         result = SqlDialect.PadRight(left, _value, val2);
                         break;
                     case "Replace":
                         _value = (mce.Arguments[0] as ConstantExpression)?.Value;
                         val2 = (mce.Arguments[1] as ConstantExpression)?.Value;
                         SetParameter(GetValueType(_value));
-                        _value = SqlDialect.ParameterPrefix + ParameterName + (Index);
+                        _value = GetParamName();
                         SetParameter(GetValueType(val2));
-                        val2 = SqlDialect.ParameterPrefix + ParameterName + (Index);
+                        val2 = GetParamName();
                         result = SqlDialect.Replace(left, _value, val2);
                         break;
                     case "Substring":
                         _value = (mce.Arguments[0] as ConstantExpression)?.Value;
                         val2 = (mce.Arguments[1] as ConstantExpression)?.Value;
                         SetParameter(GetValueType(_value));
-                        _value = SqlDialect.ParameterPrefix + ParameterName + (Index);
+                        _value = GetParamName();
                         SetParameter(GetValueType(val2));
-                        val2 = SqlDialect.ParameterPrefix + ParameterName + (Index);
+                        val2 = GetParamName();
                         result = SqlDialect.Substring(left, _value, val2);
                         break;
                     case "ToLower":
@@ -713,6 +713,15 @@ namespace Dapper.Moon
             Index++;
             string paramName = ParameterName + (Index);
             Parameters.Add(paramName, val);
+        }
+
+        /// <summary>
+        /// 获取当前参数名
+        /// </summary>
+        /// <returns></returns>
+        private string GetParamName()
+        {
+            return SqlDialect.ParameterPrefix + ParameterName + (Index);
         }
 
         /// <summary>

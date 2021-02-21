@@ -91,6 +91,7 @@ namespace Dapper.Moon
             if (wasClosed) _Connection.Close();
             return rowCount;*/
         }
+
         protected override IDbCommand GetCommand(string sql, SqlMapper.IDynamicParameters param = null, CommandType? commandType = null)
         {
             OracleCommand cmd = new OracleCommand(sql, _Connection as OracleConnection);
@@ -102,7 +103,6 @@ namespace Dapper.Moon
                 cmd.Parameters.AddRange(sqlParams.ToArray());
             }
             return cmd;
-
         }
         
         protected override IDataAdapter GetAdapter(IDbCommand command)

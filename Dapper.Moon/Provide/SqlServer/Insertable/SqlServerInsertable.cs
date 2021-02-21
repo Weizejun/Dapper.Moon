@@ -10,14 +10,7 @@ namespace Dapper.Moon
 
         public override long ExecuteIdentity()
         {
-            SqlBuilderResult sqlBuilderResult = null;
-            if (SaveObject != null)
-            {
-                sqlBuilderResult = ToSql();
-                sqlBuilderResult.Sql = string.Concat(sqlBuilderResult.Sql, ";select scope_identity()");
-                return Repository.ExecuteScalar<long>(sqlBuilderResult.Sql, SaveObject);
-            }
-            sqlBuilderResult = ToSqlBatch();
+            SqlBuilderResult sqlBuilderResult = ToSql();
             sqlBuilderResult.Sql = string.Concat(sqlBuilderResult.Sql, ";select scope_identity()");
             return Repository.ExecuteScalar<long>(sqlBuilderResult.Sql, sqlBuilderResult.DynamicParameters);
         }

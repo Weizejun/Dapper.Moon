@@ -55,13 +55,7 @@ namespace Dapper.Moon
             {
                 throw new Exception("save object is empty");
             }
-            SqlBuilderResult result = null;
-            if (SaveObject != null)
-            {
-                result = ToSql();
-                return Repository.Execute(result.Sql, SaveObject);
-            }
-            result = ToSqlBatch();
+            SqlBuilderResult result = ToSql();
             return Repository.Execute(result.Sql, result.DynamicParameters);
         }
 
@@ -110,27 +104,9 @@ namespace Dapper.Moon
 
         public virtual SqlBuilderResult ToSql()
         {
-            var columns = MasterTable.Properties.Where(i => !i.IsIdentity && !i.Ignored);
-            if (!columns.Any())
-            {
-                throw new ArgumentException("no column");
-            }
-            var columnNames = columns.Select(i => Repository.SqlDialect.SetSqlName(i.ColumnName));
-
-            string parameterSql = columns.Select(i => Repository.SqlDialect.ParameterPrefix + i.ColumnName).Aggregate(
-                 new StringBuilder(),
-                 (sb, s) => (sb.Length == 0 ? sb : sb.Append(",")).Append(s),
-                 sb => sb.ToString());
-
-            string columnSql = columnNames.Aggregate(
-                 new StringBuilder(),
-                 (sb, s) => (sb.Length == 0 ? sb : sb.Append(",")).Append(s),
-                 sb => sb.ToString());
-
-            return new SqlBuilderResult()
-            {
-                Sql = string.Format("insert into {0}({1}) values({2})", Repository.SqlDialect.SetSqlName(MasterTableName), columnSql, parameterSql),
-            };
+            if (SaveList == null) SaveList = new List<T>();
+            if (SaveObject != null) SaveList.Add(SaveObject);
+            return ToSqlBatch();
         }
     }
 }

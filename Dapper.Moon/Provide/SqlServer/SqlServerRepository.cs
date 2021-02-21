@@ -63,7 +63,6 @@ namespace Dapper.Moon
                 cmd.Parameters.AddRange(sqlParams.ToArray());
             }
             return cmd;
-
         }
 
         protected override IDataAdapter GetAdapter(IDbCommand command)

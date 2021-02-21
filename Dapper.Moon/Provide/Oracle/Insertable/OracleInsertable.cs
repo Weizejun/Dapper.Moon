@@ -17,19 +17,9 @@ namespace Dapper.Moon
             {
                 throw new ArgumentException("no column");
             }
-            SqlBuilderResult sqlBuilderResult = null;
-            int rowCount = 0;
-            if (SaveObject != null)
-            {
-                sqlBuilderResult = ToSql();
-                //可采用 returning id into :id 语法查询当前的序列 待完善
-                rowCount = Repository.Execute(sqlBuilderResult.Sql, SaveObject);
-            }
-            else
-            {
-                sqlBuilderResult = ToSqlBatch();
-                rowCount = Repository.Execute(sqlBuilderResult.Sql, sqlBuilderResult.DynamicParameters);
-            }
+            //可采用 returning id into :id 语法查询当前的序列 待完善
+            SqlBuilderResult sqlBuilderResult = ToSql();
+            int rowCount = Repository.Execute(sqlBuilderResult.Sql, sqlBuilderResult.DynamicParameters);
             return Repository.ExecuteScalar<long>($"select {propertyMap.SequenceName}.currval from dual");
         }
 
@@ -88,11 +78,13 @@ namespace Dapper.Moon
 
         public override SqlBuilderResult ToSql()
         {
+            if (SaveObject == null) return ToSqlBatch();
             var columns = MasterTable.Properties.Where(i => !i.Ignored);
             if (!columns.Any())
             {
                 throw new ArgumentException("no column");
             }
+            DynamicParameters parameters = new DynamicParameters();
             StringBuilder columnSql = new StringBuilder();
             StringBuilder parameterSql = new StringBuilder();
             foreach (var item in columns)
@@ -105,6 +97,8 @@ namespace Dapper.Moon
                 else
                 {
                     parameterSql.Append(Repository.SqlDialect.ParameterPrefix).Append(item.ColumnName).Append(",");
+                    object value = item.PropertyInfo.GetValue(SaveObject);
+                    parameters.Add(item.ColumnName, value);
                 }
             }
             columnSql.Remove(columnSql.Length - 1, 1);
@@ -112,6 +106,7 @@ namespace Dapper.Moon
             return new SqlBuilderResult()
             {
                 Sql = string.Format("insert into {0}({1}) values({2})", Repository.SqlDialect.SetSqlName(MasterTable.TableName), columnSql, parameterSql),
+                DynamicParameters = parameters
             };
         }
 

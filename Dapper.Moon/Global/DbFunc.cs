@@ -5,7 +5,7 @@ namespace Dapper.Moon
     /// <summary>
     /// 数据库中Function
     /// </summary>
-    public class DbFunc
+    public partial class DbFunc
     {
         public static TResult Sum<TResult>(TResult val) { return default(TResult); }
         public static TResult Max<TResult>(TResult val) { return default(TResult); }
