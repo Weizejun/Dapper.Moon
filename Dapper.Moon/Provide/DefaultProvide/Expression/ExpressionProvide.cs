@@ -388,6 +388,8 @@ namespace Dapper.Moon
                     }
                 }
 
+                //当前属性所属类型
+                Type entityType = me.Member.ReflectedType;
                 if (IsPrefix)
                 {
                     //i.t1.id = t1.id 、 i.t1 = t1.*
@@ -399,16 +401,12 @@ namespace Dapper.Moon
                         case 2:
                             return prefix + ".*";
                         case 3:
-                            //当前属性所属类型
-                            Type entityType = me.Member.ReflectedType;
                             string colName = GetColumnName(entityType, me.Member.Name);
                             return prefix + "." + (IsQuote ? SqlDialect.SetSqlName(colName) : colName);
                     }
                 }
                 else
                 {
-                    //当前属性所属类型
-                    Type entityType = me.Member.ReflectedType;
                     string colName = GetColumnName(entityType, me.Member.Name);
                     return (IsQuote ? SqlDialect.SetSqlName(colName) : colName);
                 }
@@ -575,8 +573,8 @@ namespace Dapper.Moon
                         break;
                     default:
                         throw new Exception("unsupported expression");
+                    #endregion string method
                 }
-                #endregion string method
                 return result;
             }
             else if (declaringType == "System.Linq.Enumerable")
