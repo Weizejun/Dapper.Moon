@@ -494,6 +494,7 @@ namespace Dapper.Moon
                 string result = "";
                 switch (mce.Method.Name)
                 {
+                    #region string method
                     case "Contains":
                         SetParameter("%" + GetValueType(_value) + "%");
                         result = string.Format("{0} like {1}", left, GetParamName());
@@ -575,6 +576,7 @@ namespace Dapper.Moon
                     default:
                         throw new Exception("unsupported expression");
                 }
+                #endregion string method
                 return result;
             }
             else if (declaringType == "System.Linq.Enumerable")
@@ -583,7 +585,13 @@ namespace Dapper.Moon
             }
             else if (declaringType == "System.Guid")
             {
-                return SqlDialect.Guid;
+                switch (mce.Method.Name)
+                {
+                    case "NewGuid": return SqlDialect.Guid;
+                    default:
+                        throw new Exception("unsupported expression");
+                }
+
             }
             else if (declaringType == "System.DateTime")
             {
@@ -646,9 +654,6 @@ namespace Dapper.Moon
                         break;
                     case "IsNull":
                         result = SqlDialect.IsNull(column, Resolve(mce.Arguments[1]));
-                        break;
-                    case "DateTime":
-                        result = SqlDialect.GetDate;
                         break;
                     case "Sequence":
                         result = (mce.Arguments[0] as ConstantExpression)?.Value.ToString();
