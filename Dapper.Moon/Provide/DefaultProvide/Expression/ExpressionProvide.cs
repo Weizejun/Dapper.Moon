@@ -589,7 +589,6 @@ namespace Dapper.Moon
                     default:
                         throw new Exception("unsupported expression");
                 }
-
             }
             else if (declaringType == "System.DateTime")
             {
