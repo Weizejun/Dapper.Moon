@@ -659,17 +659,7 @@ namespace Dapper.Moon
                 return result;
                 #endregion DbFunc
             }
-            /*else if (mce.Object == null && 
-                mce.Method.DeclaringType.GetCustomAttributes(typeof(ExpressionCallPlug), true).Any())
-            {
-                //自定义表达式函数
-                ExpressionCallPlugContext plugContext = new ExpressionCallPlugContext() {
-                    Result = "",
-                    SqlDialect = SqlDialect,
-                    DbType = DbType.SqlServer
-                };
-                var methodParams = mce.Method.GetParameters();
-            }*/
+            //自定义表达式函数
             return "";
         }
 
