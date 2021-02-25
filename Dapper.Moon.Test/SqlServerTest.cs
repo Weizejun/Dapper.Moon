@@ -377,10 +377,9 @@ END
             using (DapperMoon dm = DapperMoonFactory.Create())
             {
                  var resultX = dm.Queryable<User>().Where(i =>
-                  //i.CreateDate == DateTime.Now &&
-                  //i.CreateDate.Year == 2021 || i.CreateDate.Hour == 12
-                  //&&DateTime.Parse(string.Concat(i.Expire," 23:59:59"))<= DateTime.Now
-                  i.CreateDate.XXX("Hour",i.CreateDate) <= 24
+                  i.CreateDate == DateTime.Now &&
+                  i.CreateDate.Year == 2021 || i.CreateDate.Hour == 12
+                  && DateTime.Parse(string.Concat(i.Expire, " 23:59:59")) <= DateTime.Now
               ).Select(i => new
               {
                   x2 = DateTime.Now,

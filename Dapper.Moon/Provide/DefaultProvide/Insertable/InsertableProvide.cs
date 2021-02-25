@@ -69,7 +69,7 @@ namespace Dapper.Moon
             var columnNames = columns.Select(i => Repository.SqlDialect.SetSqlName(i.ColumnName));
             string columnSql = string.Join(",", columnNames);
             StringBuilder sbSql = new StringBuilder();
-            sbSql.Append("insert into ").Append(Repository.SqlDialect.SetSqlName(MasterTable.TableName)).Append(" (");
+            sbSql.Append("insert into ").Append(Repository.SqlDialect.SetSqlName(MasterTableName)).Append(" (");
             sbSql.Append(columnSql).Append(")");
             sbSql.AppendLine("values");
 
@@ -88,7 +88,7 @@ namespace Dapper.Moon
                     ++colIndex;
                 }
                 sbSql.Remove(sbSql.Length - 1, 1);
-                sbSql.Append("),");
+                sbSql.AppendLine("),");
             }
             sbSql.Remove(sbSql.Length - 1, 1);
             return new SqlBuilderResult()
