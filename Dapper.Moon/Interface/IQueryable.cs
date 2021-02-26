@@ -63,6 +63,9 @@ namespace Dapper.Moon
         IQueryable<T, T2> InnerJoin(Expression<Func<MoonFunc<T, T2>, bool>> join);
         IQueryable<T, T2> InnerJoin(string join, object dynamic = null);
 
+        //IQueryable<T, T2> Union();
+        //IQueryable<T, T2> UnionAll();
+
         new IQueryable<T, T2> Take(int limit);
 
         IQueryable<T, T2> GroupBy(Expression<Func<MoonFunc<T, T2>, object>> field);

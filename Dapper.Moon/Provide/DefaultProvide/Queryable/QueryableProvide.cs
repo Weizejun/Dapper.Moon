@@ -29,6 +29,7 @@ namespace Dapper.Moon
         protected MapperTable SelectIntoTable { get; set; }
         protected string IntoTableColumn { get; set; }
         protected bool IsDistinct { get; set; }
+        protected List<SqlBuilderResult> Unions { get; set; }
         #endregion
 
         public QueryableProvide(IRepository _Repository)
@@ -186,8 +187,20 @@ namespace Dapper.Moon
 
         protected List<TResult> _ToList<TResult>()
         {
-            SqlBuilderResult result = ToSql();
-            return Repository.Query<TResult>(result.Sql, result.DynamicParameters);
+            if (Unions == null)
+            {
+                SqlBuilderResult result = ToSql();
+                return Repository.Query<TResult>(result.Sql, result.DynamicParameters);
+            }
+            DynamicParameters parameters = new DynamicParameters();
+            StringBuilder sbSql = new StringBuilder();
+            foreach (var item in Unions)
+            {
+                sbSql.Append(item.Sql);
+                parameters.AddDynamicParams(item.DynamicParameters);
+            }
+            string sql = sbSql.ToString().TrimEnd("union all".ToArray()).TrimEnd("union".ToArray());
+            return Repository.Query<TResult>(sql, parameters);
         }
 
         protected TResult _First<TResult>()
@@ -345,6 +358,28 @@ namespace Dapper.Moon
             }
             SqlBuilderResult result = ToSql();
             return Repository.Execute(result.Sql, result.DynamicParameters);
+        }
+
+        protected void _Union()
+        {
+            if (Unions == null)
+            {
+                Unions = new List<SqlBuilderResult>();
+            }
+            SqlBuilderResult result = ToSql();
+            result.Sql = result.Sql + " union\r\n";
+            Unions.Add(result);
+        }
+
+        protected void _UnionAll()
+        {
+            if (Unions == null)
+            {
+                Unions = new List<SqlBuilderResult>();
+            }
+            SqlBuilderResult result = ToSql();
+            result.Sql = result.Sql + " union all\r\n";
+            Unions.Add(result);
         }
 
         protected void _UseSqlServer(SqlServerOption option) { SqlServerOption = option; }
