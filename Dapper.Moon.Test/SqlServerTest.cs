@@ -376,20 +376,10 @@ END
         {
             using (DapperMoon dm = DapperMoonFactory.Create())
             {
-                var resultX2 = dm.Queryable<User>().Where(i =>
-       true
-              ).Select(i => new
-              {
-                  SCAN_QUANTITY = DbFunc.IsNull(DbFunc.Sum(i.Flag),0),
-                  BoxNum = DbFunc.Ceiling(DbFunc.IsNull(DbFunc.Sum(i.Flag), 0) / i.Flag)
-              }).ToSql().Sql;
-
-
-                var resultX = dm.Queryable<User>().Where(i =>
-                  //i.CreateDate == DateTime.Now &&
-                  //i.CreateDate.Year == 2021 || i.CreateDate.Hour == 12
-                  //&&DateTime.Parse(string.Concat(i.Expire," 23:59:59"))<= DateTime.Now
-                  i.CreateDate.XXX("Hour",i.CreateDate) <= 24
+                 var resultX = dm.Queryable<User>().Where(i =>
+                  i.CreateDate == DateTime.Now &&
+                  i.CreateDate.Year == 2021 || i.CreateDate.Hour == 12
+                  && DateTime.Parse(string.Concat(i.Expire, " 23:59:59")) <= DateTime.Now
               ).Select(i => new
               {
                   x2 = DateTime.Now,
