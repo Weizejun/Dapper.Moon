@@ -95,5 +95,15 @@ namespace Dapper.Moon
         public abstract string Month(string field);
         public abstract string Day(string field);
         public abstract string Hour(string field);
+
+        public string Ceiling(string field)
+        {
+            return $"ceiling({field})";
+        }
+
+        public string Abs(string field)
+        {
+            return $"abs({field})";
+        }
     }
 }

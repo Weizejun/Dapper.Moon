@@ -20,6 +20,7 @@ namespace Dapper.Moon
         public static bool Between(object field, object a, object b) { return true; }
         public static TResult IsNull<TResult>(object field, TResult val) { return default(TResult); }
         public static string Sequence(string name) { return null; }
+        public static string Ceiling(object field) { return null; }
     }
 
     #region Func

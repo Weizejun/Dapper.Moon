@@ -39,5 +39,8 @@ namespace Dapper.Moon
         string ToDateTime(string field);
         string Datediff(string dateType, string column, string dt);
         string GetDate { get; }
+
+        string Ceiling(string field);
+        string Abs(string field);
     }
 }

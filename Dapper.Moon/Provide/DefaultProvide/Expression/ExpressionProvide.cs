@@ -601,6 +601,18 @@ namespace Dapper.Moon
                         throw new Exception("unsupported expression");
                 }
             }
+            else if (declaringType == "System.Math")
+            {
+                switch (mce.Method.Name)
+                {
+                    case "Ceiling":
+                        return SqlDialect.Ceiling(Resolve(mce.Arguments[0]));
+                    case "Abs":
+                        return SqlDialect.Abs(Resolve(mce.Arguments[0]));
+                    default:
+                        throw new Exception("unsupported expression");
+                }
+            }
             else if (declaringType == "Dapper.Moon.DbFunc")
             {
                 #region DbFunc
@@ -655,6 +667,9 @@ namespace Dapper.Moon
                         break;
                     case "Sequence":
                         result = (mce.Arguments[0] as ConstantExpression)?.Value.ToString();
+                        break;
+                    case "Ceiling":
+                        result = SqlDialect.Ceiling(Resolve(mce.Arguments[0]));
                         break;
                 }
                 return result;
