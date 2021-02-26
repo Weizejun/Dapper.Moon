@@ -42,7 +42,7 @@ namespace Dapper.Moon
             JoinTables = new List<MapperTable>();
             JoinTables.Add(classMapperT);
 
-            ExpressionProvideObj = ExpressionProvide.Create(Repository.SqlDialect , JoinTables.ToArray());
+            ExpressionProvideObj = ExpressionProvide.Create(Repository.SqlDialect, JoinTables.ToArray());
         }
 
         #region
@@ -187,9 +187,9 @@ namespace Dapper.Moon
 
         protected List<TResult> _ToList<TResult>()
         {
+            SqlBuilderResult result = ToSql();
             if (Unions == null)
             {
-                SqlBuilderResult result = ToSql();
                 return Repository.Query<TResult>(result.Sql, result.DynamicParameters);
             }
             DynamicParameters parameters = new DynamicParameters();
@@ -199,6 +199,8 @@ namespace Dapper.Moon
                 sbSql.Append(item.Sql);
                 parameters.AddDynamicParams(item.DynamicParameters);
             }
+            sbSql.Append(result.Sql);//last
+            parameters.AddDynamicParams(result.DynamicParameters);
             string sql = sbSql.ToString().TrimEnd("union all".ToArray()).TrimEnd("union".ToArray());
             return Repository.Query<TResult>(sql, parameters);
         }
@@ -382,6 +384,17 @@ namespace Dapper.Moon
             Unions.Add(result);
         }
 
+        public IQueryable<T> Union()
+        {
+            _Union();
+            return this;
+        }
+        public IQueryable<T> UnionAll()
+        {
+            _UnionAll();
+            return this;
+        }
+
         protected void _UseSqlServer(SqlServerOption option) { SqlServerOption = option; }
         protected void _UseMySql(MySqlOption option) { }
         protected void _UseOracle(OracleOption option) { }
@@ -508,6 +521,18 @@ namespace Dapper.Moon
         public IQueryable<T, T2> InnerJoin(Expression<Func<MoonFunc<T, T2>, bool>> join)
         {
             base._Join("inner join", join);
+            return this;
+        }
+
+        public new IQueryable<T, T2> Union()
+        {
+            _Union();
+            return this;
+        }
+
+        public new IQueryable<T, T2> UnionAll()
+        {
+            _UnionAll();
             return this;
         }
 
@@ -660,6 +685,18 @@ namespace Dapper.Moon
             return this;
         }
 
+        public new IQueryable<T, T2, T3> Union()
+        {
+            _Union();
+            return this;
+        }
+
+        public new IQueryable<T, T2, T3> UnionAll()
+        {
+            _UnionAll();
+            return this;
+        }
+
         public new IQueryable<T, T2, T3> UseSqlServer(SqlServerOption option)
         {
             _UseSqlServer(option);
@@ -798,6 +835,18 @@ namespace Dapper.Moon
         public IQueryable<T, T2, T3, T4> InnerJoin(string join, object dynamic = null)
         {
             base._Join(join, dynamic);
+            return this;
+        }
+
+        public new IQueryable<T, T2, T3, T4> Union()
+        {
+            _Union();
+            return this;
+        }
+
+        public new IQueryable<T, T2, T3, T4> UnionAll()
+        {
+            _UnionAll();
             return this;
         }
 
@@ -943,6 +992,18 @@ namespace Dapper.Moon
         public IQueryable<T, T2, T3, T4, T5> InnerJoin(string join, object dynamic = null)
         {
             base._Join(join, dynamic);
+            return this;
+        }
+
+        public new IQueryable<T, T2, T3, T4, T5> Union()
+        {
+            _Union();
+            return this;
+        }
+
+        public new IQueryable<T, T2, T3, T4, T5> UnionAll()
+        {
+            _UnionAll();
             return this;
         }
 
@@ -1092,6 +1153,18 @@ namespace Dapper.Moon
         public IQueryable<T, T2, T3, T4, T5, T6> InnerJoin(string join, object dynamic = null)
         {
             base._Join(join, dynamic);
+            return this;
+        }
+
+        public new IQueryable<T, T2, T3, T4, T5, T6> Union()
+        {
+            _Union();
+            return this;
+        }
+
+        public new IQueryable<T, T2, T3, T4, T5, T6> UnionAll()
+        {
+            _UnionAll();
             return this;
         }
 

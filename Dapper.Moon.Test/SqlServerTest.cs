@@ -482,6 +482,17 @@ END
                     n.t3 //t3.*
                 }).Take(10).ToList<UserDto>();
 
+                var result4_0 = dm.Queryable<User>()
+                .Where(n => n.NickName.Contains("bbb")).Take(1)
+                .Select(n => new
+                {
+                    count = DbFunc.Count(n.Id)
+                }).UnionAll()
+                .Where(n => n.Account.Contains("aaa")).Take(1).Select(n => new
+                {
+                    count = DbFunc.Count(n.Id)
+                }).ToList<int>();
+
                 //
                 var result5 = dm.Queryable<User>()
                     .Where(i => i.Flag != null && string.IsNullOrEmpty(i.Icon)

@@ -38,6 +38,9 @@ namespace Dapper.Moon
         IQueryable<T> UseSqlServer(SqlServerOption option);
         IQueryable<T> UseMySql(MySqlOption option);
         IQueryable<T> UseOracle(OracleOption option);
+
+        IQueryable<T> Union();
+        IQueryable<T> UnionAll();
     }
 
     public interface IQueryable<T, T2> : IQueryable<T>
@@ -62,9 +65,8 @@ namespace Dapper.Moon
 
         IQueryable<T, T2> InnerJoin(Expression<Func<MoonFunc<T, T2>, bool>> join);
         IQueryable<T, T2> InnerJoin(string join, object dynamic = null);
-
-        //IQueryable<T, T2> Union();
-        //IQueryable<T, T2> UnionAll();
+        new IQueryable<T, T2> Union();
+        new IQueryable<T, T2> UnionAll();
 
         new IQueryable<T, T2> Take(int limit);
 
@@ -97,6 +99,8 @@ namespace Dapper.Moon
         IQueryable<T, T2, T3> LeftJoin(string join, object dynamic = null);
         IQueryable<T, T2, T3> InnerJoin(Expression<Func<MoonFunc<T, T2, T3>, bool>> join);
         IQueryable<T, T2, T3> InnerJoin(string join, object dynamic = null);
+        new IQueryable<T, T2, T3> Union();
+        new IQueryable<T, T2, T3> UnionAll();
 
         new IQueryable<T, T2, T3> Take(int limit);
 
@@ -129,6 +133,8 @@ namespace Dapper.Moon
         IQueryable<T, T2, T3, T4> LeftJoin(string join, object dynamic = null);
         IQueryable<T, T2, T3, T4> InnerJoin(Expression<Func<MoonFunc<T, T2, T3, T4>, bool>> join);
         IQueryable<T, T2, T3, T4> InnerJoin(string join, object dynamic = null);
+        new IQueryable<T, T2, T3, T4> Union();
+        new IQueryable<T, T2, T3, T4> UnionAll();
 
         new IQueryable<T, T2, T3, T4> Take(int limit);
 
@@ -161,6 +167,8 @@ namespace Dapper.Moon
         IQueryable<T, T2, T3, T4, T5> LeftJoin(string join, object dynamic = null);
         IQueryable<T, T2, T3, T4, T5> InnerJoin(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, bool>> join);
         IQueryable<T, T2, T3, T4, T5> InnerJoin(string join, object dynamic = null);
+        new IQueryable<T, T2, T3, T4, T5> Union();
+        new IQueryable<T, T2, T3, T4, T5> UnionAll();
 
         new IQueryable<T, T2, T3, T4, T5> Take(int limit);
 
@@ -193,6 +201,8 @@ namespace Dapper.Moon
         IQueryable<T, T2, T3, T4, T5, T6> LeftJoin(string join, object dynamic = null);
         IQueryable<T, T2, T3, T4, T5, T6> InnerJoin(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, bool>> join);
         IQueryable<T, T2, T3, T4, T5, T6> InnerJoin(string join, object dynamic = null);
+        new IQueryable<T, T2, T3, T4, T5, T6> Union();
+        new IQueryable<T, T2, T3, T4, T5, T6> UnionAll();
 
         new IQueryable<T, T2, T3, T4, T5, T6> Take(int limit);
 

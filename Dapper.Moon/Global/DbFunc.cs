@@ -21,6 +21,7 @@ namespace Dapper.Moon
         public static TResult IsNull<TResult>(object field, TResult val) { return default(TResult); }
         public static string Sequence(string name) { return null; }
         public static string Ceiling(object field) { return null; }
+        public static string Custom(object val) { return null; }
     }
 
     #region Func

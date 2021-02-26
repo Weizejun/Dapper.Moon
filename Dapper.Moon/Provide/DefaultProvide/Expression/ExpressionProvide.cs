@@ -671,6 +671,9 @@ namespace Dapper.Moon
                     case "Ceiling":
                         result = SqlDialect.Ceiling(Resolve(mce.Arguments[0]));
                         break;
+                    case "Custom":
+                        result = (mce.Arguments[0] as ConstantExpression)?.Value?.ToString();
+                        break;
                 }
                 return result;
                 #endregion DbFunc
