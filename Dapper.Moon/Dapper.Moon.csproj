@@ -67,7 +67,6 @@
     <Compile Include="Global\ClassMapper.cs" />
     <Compile Include="Global\CommonUtils.cs" />
     <Compile Include="Global\DbFunc.cs" />
-    <Compile Include="Global\ExpressionCallExtensions.cs" />
     <Compile Include="Global\Extention.Expression.cs" />
     <Compile Include="Global\Extention.DynamicParameters.cs" />
     <Compile Include="Global\GlobalConfig.cs" />
