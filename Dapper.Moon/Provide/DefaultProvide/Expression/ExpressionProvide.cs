@@ -674,6 +674,11 @@ namespace Dapper.Moon
                     case "Custom":
                         result = (mce.Arguments[0] as ConstantExpression)?.Value?.ToString();
                         break;
+                    case "PartitionBy":
+                        val1 = (mce.Arguments[2] as ConstantExpression)?.Value?.ToString();
+                        Moon.OrderBy orderBy = (Moon.OrderBy)Enum.Parse(typeof(OrderBy), val1.ToString());
+                        result = SqlDialect.PartitionBy(Resolve(mce.Arguments[0]), Resolve(mce.Arguments[1]), orderBy);
+                        break;
                 }
                 return result;
                 #endregion DbFunc

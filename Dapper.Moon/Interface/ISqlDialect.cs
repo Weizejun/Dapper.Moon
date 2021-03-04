@@ -17,6 +17,7 @@ namespace Dapper.Moon
         string SetSqlName(string name);
         string IsNull(object column, object val);
         string Guid { get; }
+        string PartitionBy(object partitionByField, object orderByField, Moon.OrderBy orderBy = OrderBy.Asc);
 
         string Concat(string column, string val);
         string Length(string field);

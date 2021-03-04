@@ -31,6 +31,11 @@ namespace Dapper.Moon
 
         public override string Length(string field) { return $"char_length({field})"; }
 
+        public override string PartitionBy(object partitionByField, object orderByField, Moon.OrderBy orderBy = OrderBy.Asc)
+        {
+            throw new Exception("function not supported mysql");
+        }
+
         public override string IndexOf(string field, object val)
         {
             return $"locate({field}, {val}) - 1";

@@ -39,6 +39,11 @@ namespace Dapper.Moon
         public abstract string Guid { get; }
         public abstract string Length(string field);
 
+        public virtual string PartitionBy(object partitionByField, object orderByField, Moon.OrderBy orderBy = OrderBy.Asc)
+        {
+            return $"row_number() over(partition by {partitionByField} order by {orderByField} {orderBy.ToString()})";
+        }
+
         public abstract string IndexOf(string field, object val);
 
         public virtual string PadLeft(string field, object b, object c)

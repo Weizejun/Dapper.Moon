@@ -22,6 +22,7 @@ namespace Dapper.Moon
         public static string Sequence(string name) { return null; }
         public static string Ceiling(object field) { return null; }
         public static string Custom(object val) { return null; }
+        public static string PartitionBy(object partitionByField, object orderByField, Moon.OrderBy orderBy = OrderBy.Asc) { return null; }
     }
 
     #region Func
