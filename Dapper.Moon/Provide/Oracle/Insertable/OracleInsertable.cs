@@ -116,7 +116,7 @@ namespace Dapper.Moon
             {
                 throw new Exception("object is empty");
             }
-            DataTable table = new DataTable();
+            DataTable table = new DataTable(MasterTable.TableName);
             foreach (var item in MasterTable.Properties)
             {
                 if (item.Ignored)
@@ -149,7 +149,6 @@ namespace Dapper.Moon
                 }
                 table.Rows.Add(entityValues);
             }
-            table.TableName = MasterTable.TableName;
             return table;
         }
     }

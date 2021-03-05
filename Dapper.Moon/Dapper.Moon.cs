@@ -8,7 +8,7 @@ namespace Dapper.Moon
     public partial class DapperMoon : IDisposable
     {
         private IRepository _Repository = null;
-        private string _connectionString = "";
+        private string _connectionString = null;
         private DbType _dbType = DbType.SqlServer;
 
         private DapperMoon(string connectionString, DbType dbType = DbType.SqlServer)

@@ -37,6 +37,7 @@ namespace Dapper.Moon
 
         public IDeleteable<T> TableName(string tableName)
         {
+            if (tableName == null || tableName == "") throw new Exception("wrong table name");
             MasterTableName = tableName;
             return this;
         }

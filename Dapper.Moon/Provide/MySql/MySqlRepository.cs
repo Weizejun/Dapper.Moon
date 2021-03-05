@@ -11,7 +11,7 @@ namespace Dapper.Moon
 {
     public class MySqlRepository : BaseRepository, IRepository
     {
-        private string _ConnectionString { get; set; }
+        private string _ConnectionString = null;
         private ISqlDialect _SqlDialect = null;
         public MySqlRepository(string connectionString)
         {
@@ -38,6 +38,7 @@ namespace Dapper.Moon
             if (wasClosed) _Connection.Open();
             try
             {
+                OnExecuting($"MySql BulkInsert,TableName={table.TableName}", null);
                 tmpPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DateTime.Now.ToFileTime() + "_" + Guid.NewGuid().ToString("N") + ".tmp");
                 string csv = CommonUtils.ToCsvStr(table);
                 File.WriteAllText(tmpPath, csv, Encoding.UTF8);

@@ -48,6 +48,7 @@ namespace Dapper.Moon
         #region
         public IQueryable<T> TableName(string tableName)
         {
+            if (tableName == null || tableName == "") throw new Exception("wrong table name");
             MasterTableName = Repository.SqlDialect.SetSqlName(tableName);
             return this;
         }

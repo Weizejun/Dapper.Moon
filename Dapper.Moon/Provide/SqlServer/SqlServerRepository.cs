@@ -8,7 +8,7 @@ namespace Dapper.Moon
 {
     public class SqlServerRepository : BaseRepository, IRepository
     {
-        private string _ConnectionString { get; set; }
+        private string _ConnectionString = null;
         private ISqlDialect _SqlDialect = null;
 
         public SqlServerRepository(string connectionString)
@@ -33,6 +33,7 @@ namespace Dapper.Moon
             int rowCount = table.Rows.Count;
             bool wasClosed = _Connection.State == ConnectionState.Closed;
             if (wasClosed) _Connection.Open();
+            OnExecuting($"SqlServer BulkInsert,TableName={table.TableName}", null);
             using (SqlBulkCopy bulkcopy =
                     _Transaction == null ?
                     new SqlBulkCopy(_ConnectionString, SqlBulkCopyOptions.Default) :

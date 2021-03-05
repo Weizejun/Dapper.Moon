@@ -36,6 +36,7 @@ namespace Dapper.Moon
 
         public IInsertable<T> TableName(string tableName)
         {
+            if (tableName == null || tableName == "") throw new Exception("wrong table name");
             MasterTableName = tableName;
             return this;
         }

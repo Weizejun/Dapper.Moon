@@ -11,7 +11,7 @@ namespace Dapper.Moon
 {
     public class OracleRepository : BaseRepository, IRepository
     {
-        private string _ConnectionString { get; set; }
+        private string _ConnectionString = null;
         private ISqlDialect _SqlDialect = null;
 
         public OracleRepository(string connectionString)

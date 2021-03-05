@@ -22,7 +22,7 @@ namespace Dapper.Moon
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
-        /// <param name="param">DynamicParameters、OracleDynamicParameters</param>
+        /// <param name="param"></param>
         /// <param name="commandType"></param>
         /// <returns></returns>
         List<T> Query<T>(string sql, object param = null, CommandType? commandType = null);
@@ -31,7 +31,7 @@ namespace Dapper.Moon
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
-        /// <param name="param">DynamicParameters、OracleDynamicParameters</param>
+        /// <param name="param"></param>
         /// <param name="commandType"></param>
         /// <returns></returns>
         T QueryFirst<T>(string sql, object param = null, CommandType? commandType = null);
@@ -40,7 +40,7 @@ namespace Dapper.Moon
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
-        /// <param name="param">DynamicParameters、OracleDynamicParameters</param>
+        /// <param name="param"></param>
         /// <param name="commandType"></param>
         /// <returns></returns>
         T ExecuteScalar<T>(string sql, object param = null, CommandType? commandType = null);
@@ -48,7 +48,7 @@ namespace Dapper.Moon
         /// 增、删、改sql
         /// </summary>
         /// <param name="sql"></param>
-        /// <param name="param">DynamicParameters、OracleDynamicParameters</param>
+        /// <param name="param"></param>
         /// <param name="commandType"></param>
         /// <returns></returns>
         int Execute(string sql, object param = null, CommandType? commandType = null);
@@ -65,7 +65,7 @@ namespace Dapper.Moon
         /// 获取DataTable
         /// </summary>
         /// <param name="sql"></param>
-        /// <param name="param">DynamicParameters、OracleDynamicParameters</param>
+        /// <param name="param"></param>
         /// <param name="commandType"></param>
         /// <returns></returns>
         DataTable Query(string sql, object param = null, CommandType? commandType = null);
