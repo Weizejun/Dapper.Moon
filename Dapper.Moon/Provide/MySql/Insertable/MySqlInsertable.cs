@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Dapper.Moon
 {
@@ -13,6 +14,13 @@ namespace Dapper.Moon
             SqlBuilderResult sqlBuilderResult = ToSql();
             sqlBuilderResult.Sql = string.Concat(sqlBuilderResult.Sql, ";select last_insert_id()");
             return Repository.ExecuteScalar<long>(sqlBuilderResult.Sql, sqlBuilderResult.DynamicParameters);
+        }
+
+        public override async Task<long> ExecuteIdentityAsync()
+        {
+            SqlBuilderResult sqlBuilderResult = ToSql();
+            sqlBuilderResult.Sql = string.Concat(sqlBuilderResult.Sql, ";select last_insert_id()");
+            return await Repository.ExecuteScalarAsync<long>(sqlBuilderResult.Sql, sqlBuilderResult.DynamicParameters);
         }
 
         public override DataTable ToDataTable()

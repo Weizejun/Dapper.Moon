@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Dapper.Moon
 {
@@ -50,14 +51,25 @@ namespace Dapper.Moon
             return Repository.BulkInsert(ToDataTable());
         }
 
-        public virtual int Execute()
+        public async Task<int> BulkInsertAsync()
         {
-            if (SaveObject == null && SaveList == null)
+            if (SaveList == null)
             {
                 throw new Exception("save object is empty");
             }
+            return await Repository.BulkInsertAsync(ToDataTable());
+        }
+
+        public virtual int Execute()
+        {
             SqlBuilderResult result = ToSql();
             return Repository.Execute(result.Sql, result.DynamicParameters);
+        }
+
+        public virtual async Task<int> ExecuteAsync()
+        {
+            SqlBuilderResult result = ToSql();
+            return await Repository.ExecuteAsync(result.Sql, result.DynamicParameters);
         }
 
         protected virtual SqlBuilderResult ToSqlBatch()
@@ -100,11 +112,15 @@ namespace Dapper.Moon
         }
 
         public abstract long ExecuteIdentity();
-
+        public abstract Task<long> ExecuteIdentityAsync();
         public abstract DataTable ToDataTable();
 
         public virtual SqlBuilderResult ToSql()
         {
+            if (SaveObject == null && SaveList == null)
+            {
+                throw new Exception("save object is empty");
+            }
             if (SaveList == null) SaveList = new List<T>();
             if (SaveObject != null) SaveList.Add(SaveObject);
             return ToSqlBatch();

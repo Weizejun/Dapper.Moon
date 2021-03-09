@@ -65,7 +65,10 @@ namespace Dapper.Moon
             //列内容如存在半角引号（即"）则应替换成半角双引号（""）转义，并用半角引号（即""）将该字段值包含起来。
             StringBuilder sb = new StringBuilder();
             DataColumn colum;
-            foreach (DataColumn item in dt.Columns)            {                sb.Append(item.ColumnName).Append(",");            }
+            foreach (DataColumn item in dt.Columns)
+            {
+                sb.Append(item.ColumnName).Append(",");
+            }
 
             sb = sb.Remove(sb.Length - 1, 1);
             sb.AppendLine();
@@ -84,7 +87,6 @@ namespace Dapper.Moon
                 }
                 sb.AppendLine();
             }
-
             return sb.ToString();
         }
 

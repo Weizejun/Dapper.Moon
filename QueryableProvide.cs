@@ -97,23 +97,9 @@ namespace Dapper.Moon
             return Repository.ExecuteScalar<int>(result.Sql, result.DynamicParameters);
         }
 
-        protected async Task<int> _CountAsync(Expression field, bool isPrefix = false)
-        {
-            CommonUtils.ExpressionCheck(field, true);
-            Function = ExpressionProvideObj.ExpressionRouter(field, isPrefix);
-            FunctionSql = $"count({Function.Sql})";
-            SqlBuilderResult result = ToSql();
-            return await Repository.ExecuteScalarAsync<int>(result.Sql, result.DynamicParameters);
-        }
-
         public int Count(Expression<Func<T, object>> field)
         {
             return _Count(field);
-        }
-
-        public async Task<int> CountAsync(Expression<Func<T, object>> field)
-        {
-            return await _CountAsync(field);
         }
 
         protected TResult _Sum<TResult>(Expression field, bool isPrefix = false)
@@ -125,23 +111,9 @@ namespace Dapper.Moon
             return Repository.ExecuteScalar<TResult>(result.Sql, result.DynamicParameters);
         }
 
-        protected async Task<TResult> _SumAsync<TResult>(Expression field, bool isPrefix = false)
-        {
-            CommonUtils.ExpressionCheck(field, true);
-            Function = ExpressionProvideObj.ExpressionRouter(field, isPrefix);
-            FunctionSql = $"sum({Function.Sql})";
-            SqlBuilderResult result = ToSql();
-            return await Repository.ExecuteScalarAsync<TResult>(result.Sql, result.DynamicParameters);
-        }
-
         public TResult Sum<TResult>(Expression<Func<T, TResult>> field)
         {
             return _Sum<TResult>(field);
-        }
-
-        public async Task<TResult> SumAsync<TResult>(Expression<Func<T, TResult>> field)
-        {
-            return await _SumAsync<TResult>(field);
         }
 
         protected TResult _Avg<TResult>(Expression field, bool isPrefix = false)
@@ -153,23 +125,9 @@ namespace Dapper.Moon
             return Repository.ExecuteScalar<TResult>(result.Sql, result.DynamicParameters);
         }
 
-        protected async Task<TResult> _AvgAsync<TResult>(Expression field, bool isPrefix = false)
-        {
-            CommonUtils.ExpressionCheck(field, true);
-            Function = ExpressionProvideObj.ExpressionRouter(field, isPrefix);
-            FunctionSql = $"avg({Function.Sql})";
-            SqlBuilderResult result = ToSql();
-            return await Repository.ExecuteScalarAsync<TResult>(result.Sql, result.DynamicParameters);
-        }
-
         public TResult Avg<TResult>(Expression<Func<T, TResult>> field)
         {
             return _Avg<TResult>(field);
-        }
-
-        public async Task<TResult> AvgAsync<TResult>(Expression<Func<T, TResult>> field)
-        {
-            return await _AvgAsync<TResult>(field);
         }
 
         protected TResult _Max<TResult>(Expression field, bool isPrefix = false)
@@ -181,23 +139,9 @@ namespace Dapper.Moon
             return Repository.ExecuteScalar<TResult>(result.Sql, result.DynamicParameters);
         }
 
-        protected async Task<TResult> _MaxAsync<TResult>(Expression field, bool isPrefix = false)
-        {
-            CommonUtils.ExpressionCheck(field, true);
-            Function = ExpressionProvideObj.ExpressionRouter(field, isPrefix);
-            FunctionSql = $"max({Function.Sql})";
-            SqlBuilderResult result = ToSql();
-            return await Repository.ExecuteScalarAsync<TResult>(result.Sql, result.DynamicParameters);
-        }
-
         public TResult Max<TResult>(Expression<Func<T, TResult>> field)
         {
             return _Max<TResult>(field);
-        }
-
-        public async Task<TResult> MaxAsync<TResult>(Expression<Func<T, TResult>> field)
-        {
-            return await _MaxAsync<TResult>(field);
         }
 
         protected TResult _Min<TResult>(Expression field, bool isPrefix = false)
@@ -209,23 +153,9 @@ namespace Dapper.Moon
             return Repository.ExecuteScalar<TResult>(result.Sql, result.DynamicParameters);
         }
 
-        protected async Task<TResult> _MinAsync<TResult>(Expression field, bool isPrefix = false)
-        {
-            CommonUtils.ExpressionCheck(field, true);
-            Function = ExpressionProvideObj.ExpressionRouter(field, isPrefix);
-            FunctionSql = $"min({Function.Sql})";
-            SqlBuilderResult result = ToSql();
-            return await Repository.ExecuteScalarAsync<TResult>(result.Sql, result.DynamicParameters);
-        }
-
         public TResult Min<TResult>(Expression<Func<T, TResult>> field)
         {
             return _Min<TResult>(field);
-        }
-
-        public async Task<TResult> MinAsync<TResult>(Expression<Func<T, TResult>> field)
-        {
-            return await _MinAsync<TResult>(field);
         }
 
         protected void _Take(int limit)
@@ -239,28 +169,46 @@ namespace Dapper.Moon
             return this;
         }
 
-        public QueryPageResult<TResult> ToPageList<TResult>(int offset, int limit)
+        protected QueryPageResult<TResult> _ToPageList<TResult>(int offset, int limit)
         {
             if (string.IsNullOrWhiteSpace(OrderByField))
             {
                 throw new Exception("the sort condition is missing");
             }
+
             Offset = offset;
             Limit = limit;
             SqlBuilderResult result = ToSql();
             return Repository.QueryPage<TResult>(result.Sql, result.DynamicParameters);
         }
 
-        public async Task<QueryPageResult<TResult>> ToPageListAsync<TResult>(int offset, int limit)
+        protected async Task<QueryPageResult<TResult>> _ToPageListAsync<TResult>(int offset, int limit)
         {
             if (string.IsNullOrWhiteSpace(OrderByField))
             {
                 throw new Exception("the sort condition is missing");
             }
+
             Offset = offset;
             Limit = limit;
             SqlBuilderResult result = ToSql();
             return await Repository.QueryPageAsync<TResult>(result.Sql, result.DynamicParameters);
+        }
+
+        public QueryPageResult<TResult> ToPageList<TResult>(int offset, int limit)
+        {
+            return _ToPageList<TResult>(offset, limit);
+        }
+
+        public async Task<QueryPageResult<TResult>> ToPageListAsync<TResult>(int offset, int limit)
+        {
+            return await _ToPageListAsync<TResult>(offset, limit);
+        }
+
+        protected List<TResult> _ToList<TResult>()
+        {
+            SqlBuilderResult result = _ToList();
+            return Repository.Query<TResult>(result.Sql, result.DynamicParameters);
         }
 
         private SqlBuilderResult _ToList()
@@ -283,53 +231,64 @@ namespace Dapper.Moon
             return result;
         }
 
-        public List<T> ToList()
+        protected Task<List<TResult>> _ToListAsync<TResult>()
         {
             SqlBuilderResult result = _ToList();
-            return Repository.Query<T>(result.Sql, result.DynamicParameters);
+            return Repository.QueryAsync<TResult>(result.Sql, result.DynamicParameters);
         }
 
-        public async Task<List<T>> ToListAsync()
+        protected TResult _First<TResult>()
         {
-            SqlBuilderResult result = _ToList();
-            return await Repository.QueryAsync<T>(result.Sql, result.DynamicParameters);
+            Limit = 1;
+            SqlBuilderResult result = ToSql();
+            return Repository.QueryFirst<TResult>(result.Sql, result.DynamicParameters);
         }
 
-        public async Task<List<TResult>> ToListAsync<TResult>()
+        private Task<TResult> _FirstAsync<TResult>()
         {
-            SqlBuilderResult result = _ToList();
-            return await Repository.QueryAsync<TResult>(result.Sql, result.DynamicParameters);
-        }
-
-        public List<TResult> ToList<TResult>()
-        {
-            SqlBuilderResult result = _ToList();
-            return Repository.Query<TResult>(result.Sql, result.DynamicParameters);
+            Limit = 1;
+            SqlBuilderResult result = ToSql();
+            return Repository.QueryFirstAsync<TResult>(result.Sql, result.DynamicParameters);
         }
 
         public T First()
         {
-            Limit = 1;
-            SqlBuilderResult result = ToSql();
-            return Repository.QueryFirst<T>(result.Sql, result.DynamicParameters);
+            return _First<T>();
         }
 
         public async Task<T> FirstAsync()
         {
-            Limit = 1;
-            SqlBuilderResult result = ToSql();
-            return await Repository.QueryFirstAsync<T>(result.Sql, result.DynamicParameters);
+            return await _FirstAsync<T>();
+        }
+
+        public List<T> ToList()
+        {
+            return _ToList<T>();
+        }
+
+        public async Task<List<T>> ToListAsync()
+        {
+            return await _ToListAsync<T>();
+        }
+
+        public async Task<List<TResult>> ToListAsync<TResult>()
+        {
+            return await _ToListAsync<TResult>();
         }
 
         public TResult First<TResult>()
         {
-            SqlBuilderResult result = _ToList();
-            return Repository.QueryFirst<TResult>(result.Sql, result.DynamicParameters);
+            return _First<TResult>();
         }
 
         public async Task<TResult> FirstAsync<TResult>()
         {
             return await FirstAsync<TResult>();
+        }
+
+        public List<TResult> ToList<TResult>()
+        {
+            return _ToList<TResult>();
         }
 
         public DataTable ToDataTable()
@@ -367,6 +326,7 @@ namespace Dapper.Moon
             _OrderBy(field, orderBy);
             return this;
         }
+
         protected void _GroupBy(Expression field, bool isPrefix = false)
         {
             GroupByField = ExpressionProvideObj.ExpressionRouter(field, isPrefix).Sql;
@@ -561,31 +521,6 @@ namespace Dapper.Moon
             return this;
         }
 
-        public async Task<int> CountAsync(Expression<Func<MoonFunc<T, T2>, object>> field)
-        {
-            return await base._CountAsync(field, true);
-        }
-
-        public async Task<TResult> SumAsync<TResult>(Expression<Func<MoonFunc<T, T2>, TResult>> field)
-        {
-            return await base._SumAsync<TResult>(field, true);
-        }
-
-        public async Task<TResult> AvgAsync<TResult>(Expression<Func<MoonFunc<T, T2>, TResult>> field)
-        {
-            return await base._AvgAsync<TResult>(field, true);
-        }
-
-        public async Task<TResult> MaxAsync<TResult>(Expression<Func<MoonFunc<T, T2>, TResult>> field)
-        {
-            return await base._MaxAsync<TResult>(field, true);
-        }
-
-        public async Task<TResult> MinAsync<TResult>(Expression<Func<MoonFunc<T, T2>, TResult>> field)
-        {
-            return await base._MinAsync<TResult>(field, true);
-        }
-
         public int Count(Expression<Func<MoonFunc<T, T2>, object>> field)
         {
             return base._Count(field, true);
@@ -766,31 +701,6 @@ namespace Dapper.Moon
             return base._Min<TResult>(field, true);
         }
 
-        public async Task<int> CountAsync(Expression<Func<MoonFunc<T, T2, T3>, object>> field)
-        {
-            return await base._CountAsync(field, true);
-        }
-
-        public async Task<TResult> SumAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3>, TResult>> field)
-        {
-            return await base._SumAsync<TResult>(field, true);
-        }
-
-        public async Task<TResult> AvgAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3>, TResult>> field)
-        {
-            return await base._AvgAsync<TResult>(field, true);
-        }
-
-        public async Task<TResult> MaxAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3>, TResult>> field)
-        {
-            return await base._MaxAsync<TResult>(field, true);
-        }
-
-        public async Task<TResult> MinAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3>, TResult>> field)
-        {
-            return await base._MinAsync<TResult>(field, true);
-        }
-
         public IQueryable<T, T2, T3> OrderBy(Expression<Func<MoonFunc<T, T2, T3>, object>> field, OrderBy orderBy = Dapper.Moon.OrderBy.Asc)
         {
             base._OrderBy(field, orderBy, true);
@@ -942,31 +852,6 @@ namespace Dapper.Moon
         public TResult Min<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4>, TResult>> field)
         {
             return base._Min<TResult>(field, true);
-        }
-
-        public async Task<int> CountAsync(Expression<Func<MoonFunc<T, T2, T3, T4>, object>> field)
-        {
-            return await base._CountAsync(field, true);
-        }
-
-        public async Task<TResult> SumAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4>, TResult>> field)
-        {
-            return await base._SumAsync<TResult>(field, true);
-        }
-
-        public async Task<TResult> AvgAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4>, TResult>> field)
-        {
-            return await base._AvgAsync<TResult>(field, true);
-        }
-
-        public async Task<TResult> MaxAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4>, TResult>> field)
-        {
-            return await base._MaxAsync<TResult>(field, true);
-        }
-
-        public async Task<TResult> MinAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4>, TResult>> field)
-        {
-            return await base._MinAsync<TResult>(field, true);
         }
 
         public IQueryable<T, T2, T3, T4> OrderBy(Expression<Func<MoonFunc<T, T2, T3, T4>, object>> field, OrderBy orderBy = Dapper.Moon.OrderBy.Asc)
@@ -1124,31 +1009,6 @@ namespace Dapper.Moon
         public TResult Min<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, TResult>> field)
         {
             return base._Min<TResult>(field, true);
-        }
-
-        public async Task<int> CountAsync(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, object>> field)
-        {
-            return await base._CountAsync(field, true);
-        }
-
-        public async Task<TResult> SumAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, TResult>> field)
-        {
-            return await base._SumAsync<TResult>(field, true);
-        }
-
-        public async Task<TResult> AvgAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, TResult>> field)
-        {
-            return await base._AvgAsync<TResult>(field, true);
-        }
-
-        public async Task<TResult> MaxAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, TResult>> field)
-        {
-            return await base._MaxAsync<TResult>(field, true);
-        }
-
-        public async Task<TResult> MinAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, TResult>> field)
-        {
-            return await base._MinAsync<TResult>(field, true);
         }
 
         public IQueryable<T, T2, T3, T4, T5> OrderBy(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, object>> field, OrderBy orderBy = Dapper.Moon.OrderBy.Asc)
@@ -1310,31 +1170,6 @@ namespace Dapper.Moon
         public TResult Min<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, TResult>> field)
         {
             return base._Min<TResult>(field, true);
-        }
-
-        public async Task<int> CountAsync(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, object>> field)
-        {
-            return await base._CountAsync(field, true);
-        }
-
-        public async Task<TResult> SumAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, TResult>> field)
-        {
-            return await base._SumAsync<TResult>(field, true);
-        }
-
-        public async Task<TResult> AvgAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, TResult>> field)
-        {
-            return await base._AvgAsync<TResult>(field, true);
-        }
-
-        public async Task<TResult> MaxAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, TResult>> field)
-        {
-            return await base._MaxAsync<TResult>(field, true);
-        }
-
-        public async Task<TResult> MinAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, TResult>> field)
-        {
-            return await base._MinAsync<TResult>(field, true);
         }
 
         public IQueryable<T, T2, T3, T4, T5, T6> OrderBy(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, object>> field, OrderBy orderBy = Dapper.Moon.OrderBy.Asc)

@@ -2,6 +2,7 @@
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Dapper.Moon
 {
@@ -21,6 +22,19 @@ namespace Dapper.Moon
             SqlBuilderResult sqlBuilderResult = ToSql();
             int rowCount = Repository.Execute(sqlBuilderResult.Sql, sqlBuilderResult.DynamicParameters);
             return Repository.ExecuteScalar<long>($"select {propertyMap.SequenceName}.currval from dual");
+        }
+
+        public override async Task<long> ExecuteIdentityAsync()
+        {
+            var propertyMap = MasterTable.Properties.Where(i => i.IsIdentity && !string.IsNullOrWhiteSpace(i.SequenceName)).FirstOrDefault();
+            if (propertyMap == null)
+            {
+                throw new ArgumentException("no column");
+            }
+            //可采用 returning id into :id 语法查询当前的序列 待完善
+            SqlBuilderResult sqlBuilderResult = ToSql();
+            int rowCount = await Repository.ExecuteAsync(sqlBuilderResult.Sql, sqlBuilderResult.DynamicParameters);
+            return await Repository.ExecuteScalarAsync<long>($"select {propertyMap.SequenceName}.currval from dual");
         }
 
         protected override SqlBuilderResult ToSqlBatch()

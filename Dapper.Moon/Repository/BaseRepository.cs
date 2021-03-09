@@ -4,6 +4,7 @@ using System.Data;
 using Dapper;
 using System.Linq;
 using System.Data.Common;
+using System.Threading.Tasks;
 
 namespace Dapper.Moon
 {
@@ -43,15 +44,40 @@ namespace Dapper.Moon
             return _Connection.Query<T>(sql, param, commandTimeout: _CommandTimeout, commandType: commandType).ToList();
         }
 
+        public virtual async Task<List<T>> QueryAsync<T>(string sql, object param = null, CommandType? commandType = null)
+        {
+            OnExecuting(sql, param);
+            var result = await _Connection.QueryAsync<T>(sql, param, commandTimeout: _CommandTimeout, commandType: commandType);
+            return result.ToList();
+        }
+
         public virtual T QueryFirst<T>(string sql, object param = null, CommandType? commandType = null)
         {
             OnExecuting(sql, param);
             return _Connection.QueryFirstOrDefault<T>(sql, param, commandTimeout: _CommandTimeout, commandType: commandType);
         }
 
+        public virtual async Task<T> QueryFirstAsync<T>(string sql, object param = null, CommandType? commandType = null)
+        {
+            OnExecuting(sql, param);
+            var result = await _Connection.QueryFirstOrDefaultAsync<T>(sql, param, commandTimeout: _CommandTimeout, commandType: commandType);
+            return result;
+        }
+
         public virtual QueryPageResult<T> QueryPage<T>(string sql, object param = null)
         {
             using (var query = QueryMultiple(sql, param))
+            {
+                int total = query.ReadFirstOrDefault<int>();
+                var rows = query.Read<T>().ToList();
+                return new QueryPageResult<T>() { rows = rows, total = total };
+            }
+        }
+
+        public virtual async Task<QueryPageResult<T>> QueryPageAsync<T>(string sql, object param = null)
+        {
+            OnExecuting(sql, param);
+            using (var query = await QueryMultipleAsync(sql, param))
             {
                 int total = query.ReadFirstOrDefault<int>();
                 var rows = query.Read<T>().ToList();
@@ -65,11 +91,29 @@ namespace Dapper.Moon
             return _Connection.QueryMultiple(sql, param, commandTimeout: _CommandTimeout, commandType: commandType);
         }
 
+        public virtual Task<Dapper.SqlMapper.GridReader> QueryMultipleAsync(string sql, object param = null, CommandType? commandType = null)
+        {
+            OnExecuting(sql, param);
+            var result = _Connection.QueryMultipleAsync(sql, param, commandTimeout: _CommandTimeout, commandType: commandType);
+            return result;
+        }
+
         public virtual DataTable Query(string sql, object param = null, CommandType? commandType = null)
         {
             OnExecuting(sql, param);
             DataTable table = new DataTable();
             using (var reader = _Connection.ExecuteReader(sql, param, commandTimeout: _CommandTimeout, commandType: commandType))
+            {
+                table.Load(reader);
+                return table;
+            }
+        }
+
+        public virtual async Task<DataTable> QueryAsync(string sql, object param = null, CommandType? commandType = null)
+        {
+            OnExecuting(sql, param);
+            DataTable table = new DataTable();
+            using (var reader = await _Connection.ExecuteReaderAsync(sql, param, commandTimeout: _CommandTimeout, commandType: commandType))
             {
                 table.Load(reader);
                 return table;
@@ -82,10 +126,24 @@ namespace Dapper.Moon
             return _Connection.Execute(sql, param, commandTimeout: _CommandTimeout, transaction: _Transaction, commandType: commandType);
         }
 
+        public virtual async Task<int> ExecuteAsync(string sql, object param = null, CommandType? commandType = null)
+        {
+            OnExecuting(sql, param);
+            var result = await _Connection.ExecuteAsync(sql, param, commandTimeout: _CommandTimeout, transaction: _Transaction, commandType: commandType);
+            return result;
+        }
+
         public virtual T ExecuteScalar<T>(string sql, object param = null, CommandType? commandType = null)
         {
             OnExecuting(sql, param);
             return _Connection.ExecuteScalar<T>(sql, param, commandTimeout: _CommandTimeout, commandType: commandType);
+        }
+
+        public virtual async Task<T> ExecuteScalarAsync<T>(string sql, object param = null, CommandType? commandType = null)
+        {
+            OnExecuting(sql, param);
+            var result = await _Connection.ExecuteScalarAsync<T>(sql, param, commandTimeout: _CommandTimeout, commandType: commandType);
+            return result;
         }
 
         public DataSet ExecuteDataSet(string sql, SqlMapper.IDynamicParameters param = null, CommandType? commandType = null)
@@ -107,6 +165,8 @@ namespace Dapper.Moon
         protected abstract IDbCommand GetCommand(string sql, SqlMapper.IDynamicParameters param = null, CommandType? commandType = null);
         protected abstract IDataAdapter GetAdapter(IDbCommand command);
         public abstract int BulkInsert(DataTable table);
+
+        public abstract Task<int> BulkInsertAsync(DataTable table);
 
         #region 事务
         public void BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)

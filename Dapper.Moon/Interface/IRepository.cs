@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Dapper.Moon
 {
@@ -26,6 +27,7 @@ namespace Dapper.Moon
         /// <param name="commandType"></param>
         /// <returns></returns>
         List<T> Query<T>(string sql, object param = null, CommandType? commandType = null);
+        Task<List<T>> QueryAsync<T>(string sql, object param = null, CommandType? commandType = null);
         /// <summary>
         /// 获取单条结果集
         /// </summary>
@@ -35,6 +37,7 @@ namespace Dapper.Moon
         /// <param name="commandType"></param>
         /// <returns></returns>
         T QueryFirst<T>(string sql, object param = null, CommandType? commandType = null);
+        Task<T> QueryFirstAsync<T>(string sql, object param = null, CommandType? commandType = null);
         /// <summary>
         /// 单行单列
         /// </summary>
@@ -44,6 +47,7 @@ namespace Dapper.Moon
         /// <param name="commandType"></param>
         /// <returns></returns>
         T ExecuteScalar<T>(string sql, object param = null, CommandType? commandType = null);
+        Task<T> ExecuteScalarAsync<T>(string sql, object param = null, CommandType? commandType = null);
         /// <summary>
         /// 增、删、改sql
         /// </summary>
@@ -52,6 +56,7 @@ namespace Dapper.Moon
         /// <param name="commandType"></param>
         /// <returns></returns>
         int Execute(string sql, object param = null, CommandType? commandType = null);
+        Task<int> ExecuteAsync(string sql, object param = null, CommandType? commandType = null);
         /// <summary>
         /// 带分页的sql查询 sql语句中包含查询条目数
         /// 例如：SELECT count(*) from t_adminuser;SELECT * from t_adminuser
@@ -61,6 +66,7 @@ namespace Dapper.Moon
         /// <param name="param"></param>
         /// <returns></returns>
         QueryPageResult<T> QueryPage<T>(string sql, object param = null);
+        Task<QueryPageResult<T>> QueryPageAsync<T>(string sql, object param = null);
         /// <summary>
         /// 获取DataTable
         /// </summary>
@@ -69,12 +75,14 @@ namespace Dapper.Moon
         /// <param name="commandType"></param>
         /// <returns></returns>
         DataTable Query(string sql, object param = null, CommandType? commandType = null);
+        Task<DataTable> QueryAsync(string sql, object param = null, CommandType? commandType = null);
         /// <summary>
         /// 批量添加
         /// </summary>
         /// <param name="table"></param>
         /// <returns></returns>
         int BulkInsert(DataTable table);
+        Task<int> BulkInsertAsync(DataTable table);
         /// <summary>
         /// 返回结果集
         /// </summary>
@@ -91,6 +99,7 @@ namespace Dapper.Moon
         /// <param name="commandType"></param>
         /// <returns></returns>
         Dapper.SqlMapper.GridReader QueryMultiple(string sql, object param = null, CommandType? commandType = null);
+        Task<Dapper.SqlMapper.GridReader> QueryMultipleAsync(string sql, object param = null, CommandType? commandType = null);
         /// <summary>
         /// sql语句执行拦截
         /// </summary>

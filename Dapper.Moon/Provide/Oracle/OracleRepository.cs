@@ -6,6 +6,7 @@ using Dapper;
 using System.Linq;
 using System.Text;
 using System.Data.Common;
+using System.Threading.Tasks;
 
 namespace Dapper.Moon
 {
@@ -36,6 +37,18 @@ namespace Dapper.Moon
         /// <returns></returns>
         public override QueryPageResult<T> QueryPage<T>(string sql, object param = null)
         {
+            OracleDynamicParameters dyParams = QueryPage(sql, out string newsql, param);
+            using (var query = _Connection.QueryMultiple(newsql, dyParams, commandTimeout: _CommandTimeout))
+            {
+                int total = query.ReadFirstOrDefault<int>();
+                var rows = query.Read<T>().ToList();
+                return new QueryPageResult<T>() { rows = rows, total = total };
+            }
+        }
+
+        private OracleDynamicParameters QueryPage(string sql, out string newsql, object param = null)
+        {
+            newsql = "";
             if (string.IsNullOrWhiteSpace(sql)) return null;
             OracleDynamicParameters dyParams = new OracleDynamicParameters();
             if (param != null)
@@ -59,8 +72,14 @@ namespace Dapper.Moon
             dyParams.Add(":refCursor2", OracleDbType.RefCursor, ParameterDirection.Output);
 
             OnExecuting(builder.ToString(), dyParams);
+            newsql = builder.ToString();
+            return dyParams;
+        }
 
-            using (var query = _Connection.QueryMultiple(builder.ToString(), dyParams, commandTimeout: _CommandTimeout))
+        public override async Task<QueryPageResult<T>> QueryPageAsync<T>(string sql, object param = null)
+        {
+            OracleDynamicParameters dyParams = QueryPage(sql, out string newsql, param);
+            using (var query = await _Connection.QueryMultipleAsync(newsql, dyParams, commandTimeout: _CommandTimeout))
             {
                 int total = query.ReadFirstOrDefault<int>();
                 var rows = query.Read<T>().ToList();
@@ -92,6 +111,11 @@ namespace Dapper.Moon
             return rowCount;*/
         }
 
+        public override Task<int> BulkInsertAsync(DataTable table)
+        {
+            throw new Exception("please use sqlload.exe tool");
+        }
+
         protected override IDbCommand GetCommand(string sql, SqlMapper.IDynamicParameters param = null, CommandType? commandType = null)
         {
             OracleCommand cmd = new OracleCommand(sql, _Connection as OracleConnection);
@@ -104,7 +128,7 @@ namespace Dapper.Moon
             }
             return cmd;
         }
-        
+
         protected override IDataAdapter GetAdapter(IDbCommand command)
         {
             return new OracleDataAdapter(command as OracleCommand);

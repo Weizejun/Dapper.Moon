@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Dapper.Moon
 {
@@ -22,6 +23,7 @@ namespace Dapper.Moon
         IUpdateable<T> SetColumns(string sql, object param = null);
         IUpdateable<T> TableName(string tableName);
         int Execute();
+        Task<int> ExecuteAsync();
         SqlBuilderResult ToSql();
     }
 }

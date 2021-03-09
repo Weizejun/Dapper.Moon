@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace Dapper.Moon
 {
@@ -33,21 +34,41 @@ namespace Dapper.Moon
             int rowCount = table.Rows.Count;
             bool wasClosed = _Connection.State == ConnectionState.Closed;
             if (wasClosed) _Connection.Open();
+            using (SqlBulkCopy bulkcopy = BulkInsertBase(table))
+            {
+                bulkcopy.WriteToServer(table);
+            }
+            if (wasClosed) _Connection.Close();
+            return rowCount;
+        }
+
+        private SqlBulkCopy BulkInsertBase(DataTable table)
+        {
             OnExecuting($"SqlServer BulkInsert,TableName={table.TableName}", null);
-            using (SqlBulkCopy bulkcopy =
+            SqlBulkCopy bulkcopy =
                     _Transaction == null ?
                     new SqlBulkCopy(_ConnectionString, SqlBulkCopyOptions.Default) :
-                    new SqlBulkCopy(_Connection as SqlConnection, SqlBulkCopyOptions.Default, _Transaction as SqlTransaction))
+                    new SqlBulkCopy(_Connection as SqlConnection, SqlBulkCopyOptions.Default, _Transaction as SqlTransaction);
+            bulkcopy.DestinationTableName = table.TableName;
+            bulkcopy.BulkCopyTimeout = _CommandTimeout;
+            bulkcopy.BatchSize = table.Rows.Count;
+            foreach (DataColumn item in table.Columns)
             {
-                bulkcopy.DestinationTableName = table.TableName;
-                bulkcopy.BulkCopyTimeout = _CommandTimeout;
-                bulkcopy.BatchSize = rowCount;
-                foreach (DataColumn item in table.Columns)
-                {
-                    bulkcopy.ColumnMappings.Add(item.ColumnName, item.ColumnName);
-                }
-                bulkcopy.WriteToServer(table);
-                table = null;
+                bulkcopy.ColumnMappings.Add(item.ColumnName, item.ColumnName);
+            }
+            table = null;
+            return bulkcopy;
+        }
+
+        public override async Task<int> BulkInsertAsync(DataTable table)
+        {
+            if (table?.Rows?.Count == 0) return 0;
+            int rowCount = table.Rows.Count;
+            bool wasClosed = _Connection.State == ConnectionState.Closed;
+            if (wasClosed) _Connection.Open();
+            using (SqlBulkCopy bulkcopy = BulkInsertBase(table))
+            {
+                await bulkcopy.WriteToServerAsync(table);
             }
             if (wasClosed) _Connection.Close();
             return rowCount;

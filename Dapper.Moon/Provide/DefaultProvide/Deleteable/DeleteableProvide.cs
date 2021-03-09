@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Dapper.Moon
 {
@@ -50,16 +51,22 @@ namespace Dapper.Moon
 
         public int Execute()
         {
-            if (_Where == null && InParams == null)
-            {
-                throw new Exception("condition error");
-            }
             SqlBuilderResult result = ToSql();
             return Repository.Execute(result.Sql, result.DynamicParameters);
         }
 
+        public async Task<int> ExecuteAsync()
+        {
+            SqlBuilderResult result = ToSql();
+            return await Repository.ExecuteAsync(result.Sql, result.DynamicParameters);
+        }
+
         public virtual SqlBuilderResult ToSql()
         {
+            if (_Where == null && InParams == null)
+            {
+                throw new Exception("condition error");
+            }
             DynamicParameters dynamicParameters = new DynamicParameters();
             string whereSql = "";
             if (_Where != null)

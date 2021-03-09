@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Dapper.Moon
 {
@@ -38,25 +39,54 @@ namespace Dapper.Moon
             if (wasClosed) _Connection.Open();
             try
             {
-                OnExecuting($"MySql BulkInsert,TableName={table.TableName}", null);
-                tmpPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DateTime.Now.ToFileTime() + "_" + Guid.NewGuid().ToString("N") + ".tmp");
-                string csv = CommonUtils.ToCsvStr(table);
-                File.WriteAllText(tmpPath, csv, Encoding.UTF8);
-                MySqlBulkLoader bulk = new MySqlBulkLoader(_Connection as MySqlConnection)
-                {
-                    FieldTerminator = ",",
-                    FieldQuotationCharacter = '"',
-                    EscapeCharacter = '"',
-                    LineTerminator = "\r\n",
-                    FileName = tmpPath,
-                    NumberOfLinesToSkip = 1,//跳过第1行
-                    TableName = table.TableName,
-                    Local = false,
-                    CharacterSet = "UTF8"
-                };
-                bulk.Columns.AddRange(table.Columns.Cast<DataColumn>().Select(colum => colum.ColumnName).ToList());
+                MySqlBulkLoader bulk = BulkInsertBase(table);
+                tmpPath = bulk.FileName;
                 rowCount = bulk.Load();
-                table = null;
+            }
+            finally
+            {
+                if (wasClosed) _Connection.Close();
+                if (File.Exists(tmpPath))
+                    File.Delete(tmpPath);
+            }
+            return rowCount;
+        }
+
+        private MySqlBulkLoader BulkInsertBase(DataTable table)
+        {
+            OnExecuting($"MySql BulkInsert,TableName={table.TableName}", null);
+            string tmpPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DateTime.Now.ToFileTime() + "_" + Guid.NewGuid().ToString("N") + ".tmp");
+            string csv = CommonUtils.ToCsvStr(table);
+            File.WriteAllText(tmpPath, csv, Encoding.UTF8);
+            MySqlBulkLoader bulk = new MySqlBulkLoader(_Connection as MySqlConnection)
+            {
+                FieldTerminator = ",",
+                FieldQuotationCharacter = '"',
+                EscapeCharacter = '"',
+                LineTerminator = "\r\n",
+                FileName = tmpPath,
+                NumberOfLinesToSkip = 1,//跳过第1行
+                TableName = table.TableName,
+                Local = false,
+                CharacterSet = "UTF8"
+            };
+            bulk.Columns.AddRange(table.Columns.Cast<DataColumn>().Select(colum => colum.ColumnName).ToList());
+            table = null;
+            return bulk;
+        }
+
+        public override async Task<int> BulkInsertAsync(DataTable table)
+        {
+            if (table?.Rows?.Count == 0) return 0;
+            int rowCount = 0;
+            string tmpPath = "";
+            bool wasClosed = _Connection.State == ConnectionState.Closed;
+            if (wasClosed) _Connection.Open();
+            try
+            {
+                MySqlBulkLoader bulk = BulkInsertBase(table);
+                tmpPath = bulk.FileName;
+                rowCount = await bulk.LoadAsync();
             }
             finally
             {

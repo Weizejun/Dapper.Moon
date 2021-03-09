@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Dapper.Moon
 {
@@ -99,6 +100,18 @@ namespace Dapper.Moon
 
         public int Execute()
         {
+            SqlBuilderResult result = ToSql();
+            return Repository.Execute(result.Sql, result.DynamicParameters);
+        }
+
+        public async Task<int> ExecuteAsync()
+        {
+            SqlBuilderResult result = ToSql();
+            return await Repository.ExecuteAsync(result.Sql, result.DynamicParameters);
+        }
+
+        public virtual SqlBuilderResult ToSql()
+        {
             if (_Where == null)
             {
                 throw new Exception("condition error");
@@ -113,12 +126,6 @@ namespace Dapper.Moon
             {
                 throw new Exception("save object is empty");
             }
-            SqlBuilderResult result = ToSql();
-            return Repository.Execute(result.Sql, result.DynamicParameters);
-        }
-
-        public virtual SqlBuilderResult ToSql()
-        {
             DynamicParameters dynamicParameters = new DynamicParameters();
             StringBuilder builder = new StringBuilder();
             if (Columns != null && Columns.Count > 0)

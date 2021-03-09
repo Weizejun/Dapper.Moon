@@ -12,8 +12,8 @@ namespace Dapper.Moon.Test
 {
     public class SqlServerTest
     {
-        //public static string connectionString = "server=192.168.101.21;uid=sa;pwd=ccn123.;database=TDC_DB";
-        public static string connectionString = "server=.;uid=sa;pwd=123456;database=moon.cms.v2";
+        public static string connectionString = "server=192.168.101.21;uid=sa;pwd=ccn123.;database=TDC_DB";
+        //public static string connectionString = "server=.;uid=sa;pwd=123456;database=moon.cms.v2";
 
         #region DapperMoonFactory
         private class DapperMoonFactory

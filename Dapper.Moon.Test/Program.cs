@@ -22,7 +22,8 @@ namespace Dapper.Moon.Test
             //sql.DeleteTest();
             //sql.ProcTest();
             //sql.TransactionTest();
-            sql.QueryTest();
+            //sql.QueryTest();
+            //sql.DapperTest();
             //sql.LambdaQueryTest();
             //sql.DbFirstTest();
         }
@@ -37,6 +38,7 @@ namespace Dapper.Moon.Test
             //sql.ProcTest();
             //sql.TransactionTest();
             //sql.QueryTest();
+            //sql.DapperTest();
             //sql.LambdaQueryTest();
             //sql.DbFirstTest();
         }
@@ -50,6 +52,7 @@ namespace Dapper.Moon.Test
             //sql.ProcTest();
             //sql.TransactionTest();
             //sql.QueryTest();
+            //sql.DapperTest();
             //sql.LambdaQueryTest();
             //sql.DbFirstTest();
         }
