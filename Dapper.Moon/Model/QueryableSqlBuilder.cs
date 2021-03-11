@@ -15,8 +15,10 @@ namespace Dapper.Moon
         public string SelectColumns { get; set; }
         public int? Offset { get; set; }
         public int? Limit { get; set; }
-        public OrderBy OrderBy { get; set; }
-        public string OrderByField { get; set; }
+        /// <summary>
+        /// 排序字段，包含 asc和desc
+        /// </summary>
+        public string OrderBy { get; set; }
         public string GroupByField { get; set; }
         public string FunctionSql { get; set; }
         public SqlBuilderResult Function { get; set; }

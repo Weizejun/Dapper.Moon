@@ -21,8 +21,7 @@ namespace Dapper.Moon
         protected string SelectColumns;
         protected int? Offset;
         protected int? Limit;
-        protected OrderBy __OrderBy;
-        protected string OrderByField;
+        protected string __OrderBy;
         protected string GroupByField;
         protected string FunctionSql;
         protected SqlBuilderResult Function;
@@ -241,7 +240,7 @@ namespace Dapper.Moon
 
         public QueryPageResult<TResult> ToPageList<TResult>(int offset, int limit)
         {
-            if (string.IsNullOrWhiteSpace(OrderByField))
+            if (string.IsNullOrWhiteSpace(__OrderBy))
             {
                 throw new Exception("the sort condition is missing");
             }
@@ -253,7 +252,7 @@ namespace Dapper.Moon
 
         public async Task<QueryPageResult<TResult>> ToPageListAsync<TResult>(int offset, int limit)
         {
-            if (string.IsNullOrWhiteSpace(OrderByField))
+            if (string.IsNullOrWhiteSpace(__OrderBy))
             {
                 throw new Exception("the sort condition is missing");
             }
@@ -346,8 +345,8 @@ namespace Dapper.Moon
 
         protected void _OrderBy(Expression field, OrderBy orderBy = Dapper.Moon.OrderBy.Asc, bool isPrefix = false)
         {
-            __OrderBy = orderBy;
-            OrderByField = ExpressionProvideObj.ExpressionRouter(field, isPrefix).Sql;
+            __OrderBy = ExpressionProvideObj.ExpressionRouter(field, isPrefix).Sql;
+            __OrderBy += " " + orderBy.ToString();
         }
 
         public IQueryable<T> OrderBy(Expression<Func<T, object>> field, OrderBy orderBy = Dapper.Moon.OrderBy.Asc)
@@ -358,8 +357,7 @@ namespace Dapper.Moon
 
         protected void _OrderBy(string field, OrderBy orderBy = Dapper.Moon.OrderBy.Asc)
         {
-            __OrderBy = orderBy;
-            OrderByField = field;
+            __OrderBy = field + " " + orderBy.ToString();
         }
 
         public IQueryable<T> OrderBy(string field, OrderBy orderBy = Dapper.Moon.OrderBy.Asc)

@@ -46,9 +46,9 @@ namespace Dapper.Moon
                 return result;
             }
             string orderBySql = "";
-            if (!string.IsNullOrWhiteSpace(query.OrderByField))
+            if (!string.IsNullOrWhiteSpace(query.OrderBy))
             {
-                orderBySql = $" order by {query.OrderByField} {query.OrderBy.ToString()}";
+                orderBySql = $" order by {query.OrderBy}";
             }
 
             string groupBy = "";
@@ -138,7 +138,6 @@ namespace Dapper.Moon
             MasterTableName = MasterTableName,
             Offset = Offset,
             OrderBy = __OrderBy,
-            OrderByField = OrderByField,
             SelectColumns = SelectColumns,
             TableNames = TableNames,
             IsDistinct = IsDistinct
@@ -165,7 +164,6 @@ namespace Dapper.Moon
             MasterTableName = MasterTableName,
             Offset = Offset,
             OrderBy = __OrderBy,
-            OrderByField = OrderByField,
             SelectColumns = SelectColumns,
             TableNames = TableNames,
             IsDistinct = IsDistinct
@@ -191,7 +189,6 @@ namespace Dapper.Moon
             MasterTableName = MasterTableName,
             Offset = Offset,
             OrderBy = __OrderBy,
-            OrderByField = OrderByField,
             SelectColumns = SelectColumns,
             TableNames = TableNames,
             IsDistinct = IsDistinct
@@ -217,7 +214,6 @@ namespace Dapper.Moon
             MasterTableName = MasterTableName,
             Offset = Offset,
             OrderBy = __OrderBy,
-            OrderByField = OrderByField,
             SelectColumns = SelectColumns,
             TableNames = TableNames,
             IsDistinct = IsDistinct
@@ -243,7 +239,6 @@ namespace Dapper.Moon
             MasterTableName = MasterTableName,
             Offset = Offset,
             OrderBy = __OrderBy,
-            OrderByField = OrderByField,
             SelectColumns = SelectColumns,
             TableNames = TableNames,
             IsDistinct = IsDistinct
@@ -269,7 +264,6 @@ namespace Dapper.Moon
             MasterTableName = MasterTableName,
             Offset = Offset,
             OrderBy = __OrderBy,
-            OrderByField = OrderByField,
             SelectColumns = SelectColumns,
             TableNames = TableNames,
             IsDistinct = IsDistinct
