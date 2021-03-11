@@ -136,7 +136,7 @@ END
 
                 dm.RunTransaction(() =>
                 {
-                    dm.Insertable<User>(new User()
+                    int rowcount = dm.Insertable<User>(new User()
                     {
                         Id = Guid.NewGuid().ToString("N"),
                         Account = "moon_",

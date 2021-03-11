@@ -81,8 +81,9 @@ namespace Dapper.Moon
             OracleDynamicParameters dyParams = QueryPage(sql, out string newsql, param);
             using (var query = await _Connection.QueryMultipleAsync(newsql, dyParams, commandTimeout: _CommandTimeout))
             {
-                int total = query.ReadFirstOrDefault<int>();
-                var rows = query.Read<T>().ToList();
+                int total = await query.ReadFirstOrDefaultAsync<int>();
+                var result = await query.ReadAsync<T>();
+                var rows = result.ToList();
                 return new QueryPageResult<T>() { rows = rows, total = total };
             }
         }

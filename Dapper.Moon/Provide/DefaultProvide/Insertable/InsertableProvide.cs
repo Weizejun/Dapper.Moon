@@ -101,7 +101,7 @@ namespace Dapper.Moon
                     ++colIndex;
                 }
                 sbSql.Remove(sbSql.Length - 1, 1);
-                sbSql.AppendLine("),");
+                sbSql.Append("),");
             }
             sbSql.Remove(sbSql.Length - 1, 1);
             return new SqlBuilderResult()

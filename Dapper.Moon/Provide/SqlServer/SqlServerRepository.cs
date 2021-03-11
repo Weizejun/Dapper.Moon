@@ -38,6 +38,7 @@ namespace Dapper.Moon
             {
                 bulkcopy.WriteToServer(table);
             }
+            table = null;
             if (wasClosed) _Connection.Close();
             return rowCount;
         }
@@ -56,7 +57,6 @@ namespace Dapper.Moon
             {
                 bulkcopy.ColumnMappings.Add(item.ColumnName, item.ColumnName);
             }
-            table = null;
             return bulkcopy;
         }
 
@@ -70,6 +70,7 @@ namespace Dapper.Moon
             {
                 await bulkcopy.WriteToServerAsync(table);
             }
+            table = null;
             if (wasClosed) _Connection.Close();
             return rowCount;
         }
