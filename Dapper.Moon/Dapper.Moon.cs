@@ -154,7 +154,7 @@ namespace Dapper.Moon
         }
 
         /// <summary>
-        /// 多表链接，表1 别名 t1,表2 别名 t2
+        /// 多表连接，表1 别名 t1,表2 别名 t2
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="T2"></typeparam>
