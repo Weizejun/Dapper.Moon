@@ -7,13 +7,13 @@ namespace Dapper.Moon
 {
     public abstract class DeleteableProvide<T> : IDeleteable<T>
     {
-        protected IRepository Repository { get; set; }
-        protected ExpressionProvide ExpressionProvideObj { get; set; }
-        protected SqlBuilderResult _Where { get; set; }
-        protected T SaveObject { get; set; }
-        protected MapperTable MasterTable { get; set; }
-        protected string MasterTableName { get; set; }
-        protected object[] InParams { get; set; }
+        protected IRepository Repository;
+        protected ExpressionProvide ExpressionProvideObj;
+        protected SqlBuilderResult _Where;
+        protected T SaveObject;
+        protected MapperTable MasterTable;
+        protected string MasterTableName;
+        protected object[] InParams;
 
         public DeleteableProvide(IRepository _Repository)
         {

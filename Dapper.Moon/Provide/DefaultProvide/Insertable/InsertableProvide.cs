@@ -9,11 +9,11 @@ namespace Dapper.Moon
 {
     public abstract class InsertableProvide<T> : IInsertable<T>
     {
-        protected IRepository Repository { get; set; }
-        protected T SaveObject { get; set; }
-        protected List<T> SaveList { get; set; }
-        protected MapperTable MasterTable { get; set; }
-        protected string MasterTableName { get; set; }
+        protected IRepository Repository;
+        protected T SaveObject;
+        protected List<T> SaveList;
+        protected MapperTable MasterTable;
+        protected string MasterTableName;
 
         public InsertableProvide(IRepository _Repository)
         {

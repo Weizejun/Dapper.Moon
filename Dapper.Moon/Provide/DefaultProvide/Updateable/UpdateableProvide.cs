@@ -10,17 +10,17 @@ namespace Dapper.Moon
 {
     public abstract class UpdateableProvide<T> : IUpdateable<T>
     {
-        protected IRepository Repository { get; set; }
-        protected ExpressionProvide ExpressionProvideObj { get; set; }
-        protected SqlBuilderResult _Where { get; set; }
-        protected List<SqlBuilderResult> Columns { get; set; } = new List<SqlBuilderResult>();
-        protected bool? IsSingleColumn { get; set; }
-        protected string _IgnoreColumns { get; set; }
-        protected T SaveObject { get; set; }
-        protected MapperTable MasterTable { get; set; }
-        protected string MasterTableName { get; set; }
-        protected string ColumnSql { get; set; }
-        protected object ColumnSqlParam { get; set; }
+        protected IRepository Repository;
+        protected ExpressionProvide ExpressionProvideObj;
+        protected SqlBuilderResult _Where;
+        protected List<SqlBuilderResult> Columns = new List<SqlBuilderResult>();
+        protected bool? IsSingleColumn;
+        protected string _IgnoreColumns;
+        protected T SaveObject;
+        protected MapperTable MasterTable;
+        protected string MasterTableName;
+        protected string ColumnSql;
+        protected object ColumnSqlParam;
 
         public UpdateableProvide(IRepository _Repository)
         {

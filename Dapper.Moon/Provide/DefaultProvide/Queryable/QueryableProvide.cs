@@ -11,26 +11,26 @@ namespace Dapper.Moon
     public abstract class QueryableProvide<T> : IQueryable<T>
     {
         #region
-        protected IRepository Repository { get; set; }
-        protected ExpressionProvide ExpressionProvideObj { get; set; }
-        protected SqlServerOption SqlServerOption { get; set; }
-        protected SqlBuilderResult __Where { get; set; }
-        protected string MasterTableName { get; set; }
-        protected List<string> TableNames { get; set; }
-        protected List<MapperTable> JoinTables { get; set; }
-        protected string SelectColumns { get; set; }
-        protected int? Offset { get; set; }
-        protected int? Limit { get; set; }
-        protected OrderBy __OrderBy { get; set; }
-        protected string OrderByField { get; set; }
-        protected string GroupByField { get; set; }
-        protected string FunctionSql { get; set; }
-        protected SqlBuilderResult Function { get; set; }
-        protected List<SqlBuilderResult> Joins { get; set; }
-        protected MapperTable SelectIntoTable { get; set; }
-        protected string IntoTableColumn { get; set; }
-        protected bool IsDistinct { get; set; }
-        protected List<SqlBuilderResult> Unions { get; set; }
+        protected IRepository Repository;
+        protected ExpressionProvide ExpressionProvideObj;
+        protected SqlServerOption SqlServerOption;
+        protected SqlBuilderResult __Where;
+        protected string MasterTableName;
+        protected List<string> TableNames;
+        protected List<MapperTable> JoinTables;
+        protected string SelectColumns;
+        protected int? Offset;
+        protected int? Limit;
+        protected OrderBy __OrderBy;
+        protected string OrderByField;
+        protected string GroupByField;
+        protected string FunctionSql;
+        protected SqlBuilderResult Function;
+        protected List<SqlBuilderResult> Joins;
+        protected MapperTable SelectIntoTable;
+        protected string IntoTableColumn;
+        protected bool IsDistinct;
+        protected List<SqlBuilderResult> Unions;
         #endregion
 
         public QueryableProvide(IRepository _Repository)
