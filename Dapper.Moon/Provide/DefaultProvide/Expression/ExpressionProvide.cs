@@ -297,12 +297,12 @@ namespace Dapper.Moon
             {
                 if (leftSql.ToString().EndsWith(" = "))
                 {
-                    string s = leftSql.ToString().Substring(0, leftSql.Length - 2);
+                    string s = leftSql.ToString(0, leftSql.Length - 2);
                     leftSql.Clear().Append(s).Append("is null");
                 }
                 else if (leftSql.ToString().EndsWith(" <> "))
                 {
-                    string s = leftSql.ToString().Substring(0, leftSql.Length - 3);
+                    string s = leftSql.ToString(0, leftSql.Length - 3);
                     leftSql.Clear().Append(s).Append("is not null");
                 }
             }
