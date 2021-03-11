@@ -19,16 +19,11 @@ namespace Dapper.Moon
 
         public static DapperMoon Create(string connectionString, DbType dbType = DbType.SqlServer)
         {
-            //运行环境检测
-            //EnvironmentManagement.DapperRuntime();
-            //EnvironmentManagement.JsonRuntime();
             switch (dbType)
             {
                 case DbType.MySql:
-                    //EnvironmentManagement.MySqlRuntime();
                     break;
                 case DbType.Oracle:
-                    //EnvironmentManagement.OracleRuntime();
                     break;
             }
             return new DapperMoon(connectionString, dbType);

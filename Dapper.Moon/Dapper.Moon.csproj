@@ -63,7 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dapper.Moon.cs" />
-    <Compile Include="Global\EnvironmentManagement.cs" />
     <Compile Include="Global\ClassMapper.cs" />
     <Compile Include="Global\CommonUtils.cs" />
     <Compile Include="Global\DbFunc.cs" />
