@@ -549,76 +549,75 @@ namespace Dapper.Moon
 
         public IQueryable<T, T2> Where(Expression<Func<MoonFunc<T, T2>, bool>> where)
         {
-            base._Where(where, true);
+            _Where(where, true);
             return this;
         }
 
         public new IQueryable<T, T2> Where(string where, object dynamic = null)
         {
-            base._Where(where, dynamic);
+            _Where(where, dynamic);
             return this;
         }
 
         public async Task<int> CountAsync(Expression<Func<MoonFunc<T, T2>, object>> field)
         {
-            return await base._CountAsync(field, true);
+            return await _CountAsync(field, true);
         }
 
         public async Task<TResult> SumAsync<TResult>(Expression<Func<MoonFunc<T, T2>, TResult>> field)
         {
-            return await base._SumAsync<TResult>(field, true);
+            return await _SumAsync<TResult>(field, true);
         }
 
         public async Task<TResult> AvgAsync<TResult>(Expression<Func<MoonFunc<T, T2>, TResult>> field)
         {
-            return await base._AvgAsync<TResult>(field, true);
+            return await _AvgAsync<TResult>(field, true);
         }
 
         public async Task<TResult> MaxAsync<TResult>(Expression<Func<MoonFunc<T, T2>, TResult>> field)
         {
-            return await base._MaxAsync<TResult>(field, true);
+            return await _MaxAsync<TResult>(field, true);
         }
 
         public async Task<TResult> MinAsync<TResult>(Expression<Func<MoonFunc<T, T2>, TResult>> field)
         {
-            return await base._MinAsync<TResult>(field, true);
+            return await _MinAsync<TResult>(field, true);
         }
 
         public int Count(Expression<Func<MoonFunc<T, T2>, object>> field)
         {
-            return base._Count(field, true);
+            return _Count(field, true);
         }
 
         public TResult Sum<TResult>(Expression<Func<MoonFunc<T, T2>, TResult>> field)
         {
-            return base._Sum<TResult>(field, true);
+            return _Sum<TResult>(field, true);
         }
 
         public TResult Avg<TResult>(Expression<Func<MoonFunc<T, T2>, TResult>> field)
         {
-            return base._Avg<TResult>(field, true);
+            return _Avg<TResult>(field, true);
         }
 
         public TResult Max<TResult>(Expression<Func<MoonFunc<T, T2>, TResult>> field)
         {
-            return base._Max<TResult>(field, true);
+            return _Max<TResult>(field, true);
         }
 
         public TResult Min<TResult>(Expression<Func<MoonFunc<T, T2>, TResult>> field)
         {
-            return base._Min<TResult>(field, true);
+            return _Min<TResult>(field, true);
         }
 
         public IQueryable<T, T2> OrderBy(Expression<Func<MoonFunc<T, T2>, object>> field, OrderBy orderBy = Dapper.Moon.OrderBy.Asc)
         {
-            base._OrderBy(field, orderBy, true);
+            _OrderBy(field, orderBy, true);
             return this;
         }
 
         public new IQueryable<T, T2> OrderBy(string field, OrderBy orderBy = Dapper.Moon.OrderBy.Asc)
         {
-            __OrderBy = orderBy;
-            OrderByField = field;
+            _OrderBy(field, orderBy);
             return this;
         }
 
@@ -630,37 +629,37 @@ namespace Dapper.Moon
 
         public IQueryable<T, T2> Select(Expression<Func<MoonFunc<T, T2>, object>> field)
         {
-            base._Select(field, true);
+            _Select(field, true);
             return this;
         }
 
         public new IQueryable<T, T2> Select(string field)
         {
-            base._Select(field);
+            _Select(field);
             return this;
         }
 
         public IQueryable<T, T2> LeftJoin(string join, object dynamic = null)
         {
-            base._Join(join, dynamic);
+            _Join(join, dynamic);
             return this;
         }
 
         public IQueryable<T, T2> LeftJoin(Expression<Func<MoonFunc<T, T2>, bool>> join)
         {
-            base._Join("left join", join);
+            _Join("left join", join);
             return this;
         }
 
         public IQueryable<T, T2> InnerJoin(string join, object dynamic = null)
         {
-            base._Join(join, dynamic);
+            _Join(join, dynamic);
             return this;
         }
 
         public IQueryable<T, T2> InnerJoin(Expression<Func<MoonFunc<T, T2>, bool>> join)
         {
-            base._Join("inner join", join);
+            _Join("inner join", join);
             return this;
         }
 
@@ -723,82 +722,81 @@ namespace Dapper.Moon
 
         public new IQueryable<T, T2, T3> Select(string field)
         {
-            base._Select(field);
+            _Select(field);
             return this;
         }
 
         public IQueryable<T, T2, T3> Where(Expression<Func<MoonFunc<T, T2, T3>, bool>> where)
         {
-            base._Where(where, true);
+            _Where(where, true);
             return this;
         }
 
         public new IQueryable<T, T2, T3> Where(string where, object dynamic = null)
         {
-            base._Where(where, dynamic);
+            _Where(where, dynamic);
             return this;
         }
 
         public int Count(Expression<Func<MoonFunc<T, T2, T3>, object>> field)
         {
-            return base._Count(field, true);
+            return _Count(field, true);
         }
 
         public TResult Sum<TResult>(Expression<Func<MoonFunc<T, T2, T3>, TResult>> field)
         {
-            return base._Sum<TResult>(field, true);
+            return _Sum<TResult>(field, true);
         }
 
         public TResult Avg<TResult>(Expression<Func<MoonFunc<T, T2, T3>, TResult>> field)
         {
-            return base._Avg<TResult>(field, true);
+            return _Avg<TResult>(field, true);
         }
 
         public TResult Max<TResult>(Expression<Func<MoonFunc<T, T2, T3>, TResult>> field)
         {
-            return base._Max<TResult>(field, true);
+            return _Max<TResult>(field, true);
         }
 
         public TResult Min<TResult>(Expression<Func<MoonFunc<T, T2, T3>, TResult>> field)
         {
-            return base._Min<TResult>(field, true);
+            return _Min<TResult>(field, true);
         }
 
         public async Task<int> CountAsync(Expression<Func<MoonFunc<T, T2, T3>, object>> field)
         {
-            return await base._CountAsync(field, true);
+            return await _CountAsync(field, true);
         }
 
         public async Task<TResult> SumAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3>, TResult>> field)
         {
-            return await base._SumAsync<TResult>(field, true);
+            return await _SumAsync<TResult>(field, true);
         }
 
         public async Task<TResult> AvgAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3>, TResult>> field)
         {
-            return await base._AvgAsync<TResult>(field, true);
+            return await _AvgAsync<TResult>(field, true);
         }
 
         public async Task<TResult> MaxAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3>, TResult>> field)
         {
-            return await base._MaxAsync<TResult>(field, true);
+            return await _MaxAsync<TResult>(field, true);
         }
 
         public async Task<TResult> MinAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3>, TResult>> field)
         {
-            return await base._MinAsync<TResult>(field, true);
+            return await _MinAsync<TResult>(field, true);
         }
 
         public IQueryable<T, T2, T3> OrderBy(Expression<Func<MoonFunc<T, T2, T3>, object>> field, OrderBy orderBy = Dapper.Moon.OrderBy.Asc)
         {
-            base._OrderBy(field, orderBy, true);
+            _OrderBy(field, orderBy, true);
             return this;
         }
 
         public new IQueryable<T, T2, T3> OrderBy(string field, OrderBy orderBy = Dapper.Moon.OrderBy.Asc)
         {
-            __OrderBy = orderBy;
-            OrderByField = field;
+            _OrderBy(field, orderBy);
             return this;
         }
 
@@ -810,7 +808,7 @@ namespace Dapper.Moon
 
         public IQueryable<T, T2, T3> Select(Expression<Func<MoonFunc<T, T2, T3>, object>> field)
         {
-            base._Select(field, true);
+            _Select(field, true);
             return this;
         }
 
@@ -828,25 +826,25 @@ namespace Dapper.Moon
 
         public IQueryable<T, T2, T3> LeftJoin(Expression<Func<MoonFunc<T, T2, T3>, bool>> join)
         {
-            base._Join("left join", join);
+            _Join("left join", join);
             return this;
         }
 
         public IQueryable<T, T2, T3> LeftJoin(string join, object dynamic = null)
         {
-            base._Join(join, dynamic);
+            _Join(join, dynamic);
             return this;
         }
 
         public IQueryable<T, T2, T3> InnerJoin(Expression<Func<MoonFunc<T, T2, T3>, bool>> join)
         {
-            base._Join("inner join", join);
+            _Join("inner join", join);
             return this;
         }
 
         public IQueryable<T, T2, T3> InnerJoin(string join, object dynamic = null)
         {
-            base._Join(join, dynamic);
+            _Join(join, dynamic);
             return this;
         }
 
@@ -901,82 +899,81 @@ namespace Dapper.Moon
 
         public new IQueryable<T, T2, T3, T4> Select(string field)
         {
-            base._Select(field);
+            _Select(field);
             return this;
         }
 
         public IQueryable<T, T2, T3, T4> Where(Expression<Func<MoonFunc<T, T2, T3, T4>, bool>> where)
         {
-            base._Where(where, true);
+            _Where(where, true);
             return this;
         }
 
         public new IQueryable<T, T2, T3, T4> Where(string where, object dynamic = null)
         {
-            base._Where(where, dynamic);
+            _Where(where, dynamic);
             return this;
         }
 
         public int Count(Expression<Func<MoonFunc<T, T2, T3, T4>, object>> field)
         {
-            return base._Count(field, true);
+            return _Count(field, true);
         }
 
         public TResult Sum<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4>, TResult>> field)
         {
-            return base._Sum<TResult>(field, true);
+            return _Sum<TResult>(field, true);
         }
 
         public TResult Avg<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4>, TResult>> field)
         {
-            return base._Avg<TResult>(field, true);
+            return _Avg<TResult>(field, true);
         }
 
         public TResult Max<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4>, TResult>> field)
         {
-            return base._Max<TResult>(field, true);
+            return _Max<TResult>(field, true);
         }
 
         public TResult Min<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4>, TResult>> field)
         {
-            return base._Min<TResult>(field, true);
+            return _Min<TResult>(field, true);
         }
 
         public async Task<int> CountAsync(Expression<Func<MoonFunc<T, T2, T3, T4>, object>> field)
         {
-            return await base._CountAsync(field, true);
+            return await _CountAsync(field, true);
         }
 
         public async Task<TResult> SumAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4>, TResult>> field)
         {
-            return await base._SumAsync<TResult>(field, true);
+            return await _SumAsync<TResult>(field, true);
         }
 
         public async Task<TResult> AvgAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4>, TResult>> field)
         {
-            return await base._AvgAsync<TResult>(field, true);
+            return await _AvgAsync<TResult>(field, true);
         }
 
         public async Task<TResult> MaxAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4>, TResult>> field)
         {
-            return await base._MaxAsync<TResult>(field, true);
+            return await _MaxAsync<TResult>(field, true);
         }
 
         public async Task<TResult> MinAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4>, TResult>> field)
         {
-            return await base._MinAsync<TResult>(field, true);
+            return await _MinAsync<TResult>(field, true);
         }
 
         public IQueryable<T, T2, T3, T4> OrderBy(Expression<Func<MoonFunc<T, T2, T3, T4>, object>> field, OrderBy orderBy = Dapper.Moon.OrderBy.Asc)
         {
-            base._OrderBy(field, orderBy, true);
+            _OrderBy(field, orderBy, true);
             return this;
         }
 
         public new IQueryable<T, T2, T3, T4> OrderBy(string field, OrderBy orderBy = Dapper.Moon.OrderBy.Asc)
         {
-            __OrderBy = orderBy;
-            OrderByField = field;
+            _OrderBy(field, orderBy);
             return this;
         }
 
@@ -988,7 +985,7 @@ namespace Dapper.Moon
 
         public IQueryable<T, T2, T3, T4> Select(Expression<Func<MoonFunc<T, T2, T3, T4>, object>> field)
         {
-            base._Select(field, true);
+            _Select(field, true);
             return this;
         }
 
@@ -1006,25 +1003,25 @@ namespace Dapper.Moon
 
         public IQueryable<T, T2, T3, T4> LeftJoin(Expression<Func<MoonFunc<T, T2, T3, T4>, bool>> join)
         {
-            base._Join("left join", join);
+            _Join("left join", join);
             return this;
         }
 
         public IQueryable<T, T2, T3, T4> LeftJoin(string join, object dynamic = null)
         {
-            base._Join(join, dynamic);
+            _Join(join, dynamic);
             return this;
         }
 
         public IQueryable<T, T2, T3, T4> InnerJoin(Expression<Func<MoonFunc<T, T2, T3, T4>, bool>> join)
         {
-            base._Join("inner join", join);
+            _Join("inner join", join);
             return this;
         }
 
         public IQueryable<T, T2, T3, T4> InnerJoin(string join, object dynamic = null)
         {
-            base._Join(join, dynamic);
+            _Join(join, dynamic);
             return this;
         }
 
@@ -1083,82 +1080,81 @@ namespace Dapper.Moon
 
         public new IQueryable<T, T2, T3, T4, T5> Select(string field)
         {
-            base._Select(field);
+            _Select(field);
             return this;
         }
 
         public IQueryable<T, T2, T3, T4, T5> Where(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, bool>> where)
         {
-            base._Where(where, true);
+            _Where(where, true);
             return this;
         }
 
         public new IQueryable<T, T2, T3, T4, T5> Where(string where, object dynamic = null)
         {
-            base._Where(where, dynamic);
+            _Where(where, dynamic);
             return this;
         }
 
         public int Count(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, object>> field)
         {
-            return base._Count(field, true);
+            return _Count(field, true);
         }
 
         public TResult Sum<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, TResult>> field)
         {
-            return base._Sum<TResult>(field, true);
+            return _Sum<TResult>(field, true);
         }
 
         public TResult Avg<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, TResult>> field)
         {
-            return base._Avg<TResult>(field, true);
+            return _Avg<TResult>(field, true);
         }
 
         public TResult Max<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, TResult>> field)
         {
-            return base._Max<TResult>(field, true);
+            return _Max<TResult>(field, true);
         }
 
         public TResult Min<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, TResult>> field)
         {
-            return base._Min<TResult>(field, true);
+            return _Min<TResult>(field, true);
         }
 
         public async Task<int> CountAsync(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, object>> field)
         {
-            return await base._CountAsync(field, true);
+            return await _CountAsync(field, true);
         }
 
         public async Task<TResult> SumAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, TResult>> field)
         {
-            return await base._SumAsync<TResult>(field, true);
+            return await _SumAsync<TResult>(field, true);
         }
 
         public async Task<TResult> AvgAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, TResult>> field)
         {
-            return await base._AvgAsync<TResult>(field, true);
+            return await _AvgAsync<TResult>(field, true);
         }
 
         public async Task<TResult> MaxAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, TResult>> field)
         {
-            return await base._MaxAsync<TResult>(field, true);
+            return await _MaxAsync<TResult>(field, true);
         }
 
         public async Task<TResult> MinAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, TResult>> field)
         {
-            return await base._MinAsync<TResult>(field, true);
+            return await _MinAsync<TResult>(field, true);
         }
 
         public IQueryable<T, T2, T3, T4, T5> OrderBy(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, object>> field, OrderBy orderBy = Dapper.Moon.OrderBy.Asc)
         {
-            base._OrderBy(field, orderBy, true);
+            _OrderBy(field, orderBy, true);
             return this;
         }
 
         public new IQueryable<T, T2, T3, T4, T5> OrderBy(string field, OrderBy orderBy = Dapper.Moon.OrderBy.Asc)
         {
-            __OrderBy = orderBy;
-            OrderByField = field;
+            _OrderBy(field, orderBy);
             return this;
         }
 
@@ -1170,7 +1166,7 @@ namespace Dapper.Moon
 
         public IQueryable<T, T2, T3, T4, T5> Select(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, object>> field)
         {
-            base._Select(field, true);
+            _Select(field, true);
             return this;
         }
 
@@ -1188,25 +1184,25 @@ namespace Dapper.Moon
 
         public IQueryable<T, T2, T3, T4, T5> LeftJoin(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, bool>> join)
         {
-            base._Join("left join", join);
+            _Join("left join", join);
             return this;
         }
 
         public IQueryable<T, T2, T3, T4, T5> LeftJoin(string join, object dynamic = null)
         {
-            base._Join(join, dynamic);
+            _Join(join, dynamic);
             return this;
         }
 
         public IQueryable<T, T2, T3, T4, T5> InnerJoin(Expression<Func<MoonFunc<T, T2, T3, T4, T5>, bool>> join)
         {
-            base._Join("inner join", join);
+            _Join("inner join", join);
             return this;
         }
 
         public IQueryable<T, T2, T3, T4, T5> InnerJoin(string join, object dynamic = null)
         {
-            base._Join(join, dynamic);
+            _Join(join, dynamic);
             return this;
         }
 
@@ -1269,82 +1265,81 @@ namespace Dapper.Moon
 
         public new IQueryable<T, T2, T3, T4, T5, T6> Select(string field)
         {
-            base._Select(field);
+            _Select(field);
             return this;
         }
 
         public IQueryable<T, T2, T3, T4, T5, T6> Where(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, bool>> where)
         {
-            base._Where(where, true);
+            _Where(where, true);
             return this;
         }
 
         public new IQueryable<T, T2, T3, T4, T5, T6> Where(string where, object dynamic = null)
         {
-            base._Where(where, dynamic);
+            _Where(where, dynamic);
             return this;
         }
 
         public int Count(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, object>> field)
         {
-            return base._Count(field, true);
+            return _Count(field, true);
         }
 
         public TResult Sum<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, TResult>> field)
         {
-            return base._Sum<TResult>(field, true);
+            return _Sum<TResult>(field, true);
         }
 
         public TResult Avg<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, TResult>> field)
         {
-            return base._Avg<TResult>(field, true);
+            return _Avg<TResult>(field, true);
         }
 
         public TResult Max<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, TResult>> field)
         {
-            return base._Max<TResult>(field, true);
+            return _Max<TResult>(field, true);
         }
 
         public TResult Min<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, TResult>> field)
         {
-            return base._Min<TResult>(field, true);
+            return _Min<TResult>(field, true);
         }
 
         public async Task<int> CountAsync(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, object>> field)
         {
-            return await base._CountAsync(field, true);
+            return await _CountAsync(field, true);
         }
 
         public async Task<TResult> SumAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, TResult>> field)
         {
-            return await base._SumAsync<TResult>(field, true);
+            return await _SumAsync<TResult>(field, true);
         }
 
         public async Task<TResult> AvgAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, TResult>> field)
         {
-            return await base._AvgAsync<TResult>(field, true);
+            return await _AvgAsync<TResult>(field, true);
         }
 
         public async Task<TResult> MaxAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, TResult>> field)
         {
-            return await base._MaxAsync<TResult>(field, true);
+            return await _MaxAsync<TResult>(field, true);
         }
 
         public async Task<TResult> MinAsync<TResult>(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, TResult>> field)
         {
-            return await base._MinAsync<TResult>(field, true);
+            return await _MinAsync<TResult>(field, true);
         }
 
         public IQueryable<T, T2, T3, T4, T5, T6> OrderBy(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, object>> field, OrderBy orderBy = Dapper.Moon.OrderBy.Asc)
         {
-            base._OrderBy(field, orderBy, true);
+            _OrderBy(field, orderBy, true);
             return this;
         }
 
         public new IQueryable<T, T2, T3, T4, T5, T6> OrderBy(string field, OrderBy orderBy = Dapper.Moon.OrderBy.Asc)
         {
-            __OrderBy = orderBy;
-            OrderByField = field;
+            _OrderBy(field, orderBy);
             return this;
         }
 
@@ -1356,7 +1351,7 @@ namespace Dapper.Moon
 
         public IQueryable<T, T2, T3, T4, T5, T6> Select(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, object>> field)
         {
-            base._Select(field, true);
+            _Select(field, true);
             return this;
         }
 
@@ -1374,25 +1369,25 @@ namespace Dapper.Moon
 
         public IQueryable<T, T2, T3, T4, T5, T6> LeftJoin(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, bool>> join)
         {
-            base._Join("left join", join);
+            _Join("left join", join);
             return this;
         }
 
         public IQueryable<T, T2, T3, T4, T5, T6> LeftJoin(string join, object dynamic = null)
         {
-            base._Join(join, dynamic);
+            _Join(join, dynamic);
             return this;
         }
 
         public IQueryable<T, T2, T3, T4, T5, T6> InnerJoin(Expression<Func<MoonFunc<T, T2, T3, T4, T5, T6>, bool>> join)
         {
-            base._Join("inner join", join);
+            _Join("inner join", join);
             return this;
         }
 
         public IQueryable<T, T2, T3, T4, T5, T6> InnerJoin(string join, object dynamic = null)
         {
-            base._Join(join, dynamic);
+            _Join(join, dynamic);
             return this;
         }
 
